@@ -1,0 +1,28 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\DiagnosticSys\Metrics.cs">
+    <Files>
+      <File FileName="Assets\DiagnosticSys\Rules.cs" Line="131" Column="1" />
+      <File FileName="Assets\Game\QuestionData.cs" Line="28" Column="24" />
+      <File FileName="Assets\DiagnosticSys\ErrorMetrics.cs" Line="1" Column="1" />
+      <File FileName="Assets\DiagnosticSys\HintMetrics.cs" Line="1" Column="1" />
+      <File FileName="Assets\DiagnosticSys\Metrics.cs" Line="230" Column="4" />
+      <File FileName="Assets\DiagnosticSys\TaskMetrics.cs" Line="1" Column="1" />
+      <File FileName="Assets\DiagnosticSys\TimeMetrics.cs" Line="1" Column="1" />
+      <File FileName="Assets\Game\MainScript.cs" Line="23" Column="4" />
+      <File FileName="Assets\Game\QuestionManager.cs" Line="75" Column="1" />
+      <File FileName="Assets\Game\Timer.cs" Line="128" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="D:\Unity Projects\TestFrameworkForPrototypeV1\Assets\NewBehaviourScript.cs" line="50" />
+      <Breakpoint file="D:\Unity Projects\TestFrameworkForPrototypeV1\Assets\Rules.cs" line="125" />
+      <Breakpoint file="D:\Unity Projects\TestFrameworkForPrototypeV1\Assets\Timer.cs" line="127" />
+      <Breakpoint file="D:\Unity Projects\TestFrameworkForPrototypeV1\Assets\Game\QuestionData.cs" line="64" />
+      <Breakpoint file="D:\Unity Projects\TestFrameworkForPrototypeV1\Assets\DiagnosticSys\Rules.cs" line="114" />
+      <Breakpoint file="D:\Unity Projects\TestFrameworkForPrototypeV1\Assets\Game\QuestionManager.cs" line="65" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
