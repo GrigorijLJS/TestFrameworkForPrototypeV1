@@ -30,7 +30,7 @@ namespace Prototype1v1
 		public string the_question= "";
 
 
-		private string learning_activity_command = "";
+		private string current_activity_command = "";
 
 		private string ongoing_learning_activity_name = "";
 
@@ -53,6 +53,12 @@ namespace Prototype1v1
 		private QuestionManager QManagObj = new QuestionManager();
 		private bool new_question = false;
 		private int new_points = 0;
+
+
+        string activity_timer_start = "start";
+        string activity_timer_pause = "pause";
+        string activity_timer_unpause = "unpause";
+        string activity_timer_stop = "stop";
 
         void Start()
         {
@@ -118,14 +124,14 @@ namespace Prototype1v1
 			temp_activity_container=null;
 
 			//get a new question
-			QManagObj.NewQuestionOrNewActivity(ref the_question);
+			QManagObj.NewQuestionForTheFirstActivity(ref the_question);
 
             //first task
             if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(quiz_activity_name,
                    out temp_activity_container) &&
                    temp_activity_container.activity_completed == false)
             {
-                CheckForStartOfActivity(ref temp_activity_container);
+                CheckForStartOfActivity(ref temp_activity_container, activity_timer_start);
                 //temp_learning_activity_container=null;
             }
 
@@ -175,7 +181,7 @@ namespace Prototype1v1
                         temp_container.ErrorMade(mainScriptObj.playerMetricsObject
                                                  .timeMetricsObject.time_since_beginning_of_game.Elapsed);
 
-                        string errorInfo = "ErrorInRecognizing timestamps: ";
+                        string errorInfo = "ErrorInRecognizing timestamps: " + temp_container.error_time_stamps.Count + "#  ";
                         for (int i = 0; i < temp_container.error_time_stamps.Count; i++)
                         {
                             errorInfo += temp_container.error_time_stamps[i] + "  ";
@@ -196,7 +202,7 @@ namespace Prototype1v1
                         temp_container.ErrorMade(mainScriptObj.playerMetricsObject
                                                  .timeMetricsObject.time_since_beginning_of_game.Elapsed);
 
-                        string errorInfo = "ErrorInRecalling timestamps: ";
+                        string errorInfo = "ErrorInRecalling timestamps: " + temp_container.error_time_stamps.Count+"#  ";
                         for (int i = 0; i < temp_container.error_time_stamps.Count; i++)
                         {
                             errorInfo += temp_container.error_time_stamps[i] + "  ";
@@ -207,26 +213,48 @@ namespace Prototype1v1
 					inputField.text="";
 				}
                 //get a new question
-                if(QManagObj.NewQuestionOrNewActivity(ref the_question))
+                if(QManagObj.NewQuestionForTheFirstActivity(ref the_question))
                 {
+                    //reset the question var to empty
+                    //the_question = "";
                     //new activity
-                    DebugInput("Chaos sighted!");
-                    SecondTask();
+                    SecondTask(ref the_question);
                 }
 
 			});
         }
 
-        void SecondTask()
+        void SecondTask(ref string the_question)
         {
             if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(quiz_activity_name,
                    out temp_activity_container) &&
-                   temp_activity_container.activity_completed == false)
-            {
-                CheckForStartOfActivity(ref temp_activity_container);
-                //temp_learning_activity_container=null;
+                   temp_activity_container.activity_completed == false)//if the first activity is not finished
+            {//but the requirements are met
+                DebugInput("Chaos sighted!");
+                CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the first activity
+                temp_activity_container = null;//and empty the container
+
+
+                StartCoroutine(WaitFunction());
+
+                //start the second task
+                if(mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(classification_activity_name,
+                   out temp_activity_container))
+                {
+                    CheckForStartOfActivity(ref temp_activity_container, activity_timer_start);//start the second activity timer
+                    QManagObj.NewQuestionForTheSecondActivity(ref the_question);
+                }
+                
             }
         }
+
+        IEnumerator WaitFunction()
+        {
+            Debug.Log("Before Waiting 2 seconds");
+            yield return new WaitForSeconds(2);
+            Debug.Log("After Waiting 2 Seconds");
+        }
+
 
 		private void DebugInput(string the_text)
 		{
@@ -261,7 +289,7 @@ namespace Prototype1v1
             //        if(new_question)
             //        {
             //            new_question=false;
-            //            QManagObj.NewQuestionOrNewActivity(ref the_question);
+            //            QManagObj.NewQuestionForTheFirstActivity(ref the_question);
             //        }
             //        //temp_learning_activity_container=null;
             //    }
@@ -356,12 +384,8 @@ namespace Prototype1v1
 //			}
 //		}
 
-		void CheckForStartOfActivity(ref ActivityMetrics temp_learning_activity_container)
+		void CheckForStartOfActivity(ref ActivityMetrics temp_learning_activity_container, string activity_command)
         {
-			string activity_timer_start="start";
-			string activity_timer_pause="pause";
-			string activity_timer_unpause="unpause";
-			string activity_timer_stop="stop";
 			//ActivityMetrics temp_container;
 
             //if (Input.GetKeyDown(KeyCode.T) == true)
@@ -369,37 +393,42 @@ namespace Prototype1v1
 
 				/*if(mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue
 				   (learning_activity_name_A, out temp_learning_activity_container))*/
-				if(temp_learning_activity_container!=null)
+				//if(temp_learning_activity_container!=null)
 				{
-					//if (learning_activity_command=="" && Input.GetKeyDown(KeyCode.T) == true)
+					//if (current_activity_command=="" && Input.GetKeyDown(KeyCode.T) == true)
+                    if(activity_command==activity_timer_start)
 					{//start the counting of time-on-task
 						//temp_learning_activity_container.IncrementNumberOfTriesToSolve();
 						temp_learning_activity_container.StartStopOrPauseTimeOnActivityCounter(activity_timer_start);
 						//Debug.LogError(mainScriptObj.playerMetricsObject.activityMetricsObject.GetTimeOnTask());
 						//Debug.LogError(mainScriptObj.playerMetricsObject.activityMetricsObject.time_on_activity.Elapsed.ToString());
-						learning_activity_command = activity_timer_start;
+						current_activity_command = activity_timer_start;
 					}
-					if(learning_activity_command==activity_timer_start &&
-					   temp_learning_activity_container.time_on_activity.IsRunning)
-					{
-						if (Input.GetKeyDown(KeyCode.P) == true)
+					/*if(current_activity_command==activity_timer_start &&
+					   temp_learning_activity_container.time_on_activity.IsRunning)*/
+                    if (activity_command == activity_timer_pause && 
+                        temp_learning_activity_container.time_on_activity.IsRunning)//if the activity is ongoing and the 
+					{//time counter is running 
+						//if (Input.GetKeyDown(KeyCode.P) == true)
 						{
-							learning_activity_command = activity_timer_pause;
+							current_activity_command = activity_timer_pause;
 							temp_learning_activity_container.StartStopOrPauseTimeOnActivityCounter(activity_timer_pause);
 						}
 
 					}
-					if(learning_activity_command==activity_timer_pause)
+					//if(current_activity_command==activity_timer_pause)
+                    if (activity_command == activity_timer_unpause)
 					{        
-						if(Input.GetKeyDown(KeyCode.U) == true)
+						//if(Input.GetKeyDown(KeyCode.U) == true)
 						{
 							temp_learning_activity_container.StartStopOrPauseTimeOnActivityCounter(activity_timer_unpause);
-							learning_activity_command = activity_timer_start;
+							current_activity_command = activity_timer_start;
 						}
 					}
-					if(Input.GetKeyDown(KeyCode.A) == true)
+					//if(Input.GetKeyDown(KeyCode.A) == true)
+                    if (activity_command == activity_timer_stop)
 					{//stop the counting of time-on-task
-						learning_activity_command = "";
+						current_activity_command = "";
 						temp_learning_activity_container.StartStopOrPauseTimeOnActivityCounter(activity_timer_stop);
 						new_question=true;
 					}

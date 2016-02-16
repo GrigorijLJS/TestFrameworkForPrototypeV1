@@ -9,39 +9,48 @@ using System.Collections;
 
 public class QuestionManager : MonoBehaviour {
 	[SerializeField]
-	/*private*/public TextAsset questionDataXMLFile;
-	private QuestionData questionData;
+	///*private*/public TextAsset questionDataXMLFile;
+    private QuestionData questionDataForFirstActivity;
+    private QuestionData questionDataForSecondActivity;
 	private Question currentQuestion;
 
-	private int question_index;
+    private int question_index;
+    private int question_index_for_second;
 
 
 	public QuestionManager()
 	{
 		question_index = 0;
-		//questionData = QuestionData.LoadFromText(Application.dataPath+"/Game/questionDataXMLFile.xml");
-		//questionData = QuestionData.LoadFromText(questionDataXMLFile.xml);
+        question_index_for_second = 0;
+        questionDataForFirstActivity = null;
+        questionDataForSecondActivity = null;
+		//questionDataForFirstActivity = QuestionData.LoadFromText(Application.dataPath+"/Game/questionDataXMLFile.xml");
+		//questionDataForFirstActivity = QuestionData.LoadFromText(questionDataXMLFile.xml);
 	}
 
 	void Start() 
     {
-		//questionData = QuestionData.LoadFromText(questionDataXMLFile.text);	
-		//questionData = QuestionData.LoadFromText(Path.Combine(Application.dataPath,"questionDataXMLFile.xml"));
+		//questionDataForFirstActivity = QuestionData.LoadFromText(questionDataXMLFile.text);	
+		//questionDataForFirstActivity = QuestionData.LoadFromText(Path.Combine(Application.dataPath,"questionDataXMLFile.xml"));
 	}
 	
-	// Call this when you want a new question
-	public bool NewQuestionOrNewActivity(ref string the_question) 
+	// Call this when you want a new question for the first activity
+	public bool NewQuestionForTheFirstActivity(ref string the_question) 
 	{
-		//the path to the XML file with the data about the questions
-		questionData = QuestionData.Load(Path.Combine(Application.dataPath,"questionData.xml"));
+		if(questionDataForFirstActivity==null)
+        {
+            //the path to the XML file with the data about the questions
+            questionDataForFirstActivity = QuestionData.Load(Path.Combine
+                (Application.dataPath, "questionDataForFirstActivity.xml"));
+        }
 
 		// gets a random question
-		//int q = Random.Range(0, questionData.questions.Count);
+		//int q = Random.Range(0, questionDataForFirstActivity.questions.Count);
 
-        if ((question_index + 1) <= questionData.questions.Count)
+        if ((question_index + 1) <= questionDataForFirstActivity.questions.Count)
         {
             //get a question
-            currentQuestion = questionData.questions[question_index];
+            currentQuestion = questionDataForFirstActivity.questions[question_index];
 
             // add code here to set text values of your Question GameObject
             // e.g. GetComponent<SomeScript>().Text = currentQuestion.questionText;
@@ -53,22 +62,62 @@ public class QuestionManager : MonoBehaviour {
                 + currentQuestion.correctAnswer+"\n";
         }
 
-        if ((question_index + 1) <= questionData.questions.Count)
+        if ((question_index + 1) <= questionDataForFirstActivity.questions.Count)
         {//still continue with this activity
             question_index++;
             return false;
         }
-        /*else if ((question_index + 1) == questionData.questions.Count)
+        /*else if ((question_index + 1) == questionDataForFirstActivity.questions.Count)
         {//still continue with this activity
             return false;
         }*/
-        else if ((question_index + 1) > questionData.questions.Count)
+        else if ((question_index + 1) > questionDataForFirstActivity.questions.Count)
         {//new activity
             return true;
         }
         else//new activity
             return true;
 	}
+
+    //Call this when you want a new question for the second activity
+    public bool NewQuestionForTheSecondActivity(ref string the_question)
+    {
+        if (questionDataForSecondActivity == null)
+        {
+            //the path to the XML file with the data about the questions
+            questionDataForSecondActivity = QuestionData.Load(Path.Combine
+                (Application.dataPath, "questionDataForSecondActivity.xml"));
+        }
+
+        if ((question_index_for_second + 1) <= questionDataForSecondActivity.questions.Count)
+        {
+            //get a question
+            currentQuestion = questionDataForSecondActivity.questions[question_index_for_second];
+
+            the_question = "Question: " + currentQuestion.questionText + " \n\nChoices: " + currentQuestion.answer1 +
+                "     " + currentQuestion.answer2
+                + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5
+                + "     " + currentQuestion.answer6 + "     " + currentQuestion.answer7 + "     " + currentQuestion.answer8
+                + "     " + currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n" + "correct answer: "
+                + currentQuestion.correctAnswer + "\n";
+        }
+
+        if ((question_index_for_second + 1) <= questionDataForSecondActivity.questions.Count)
+        {//still continue with this activity
+            question_index_for_second++;
+            return false;
+        }
+        /*else if ((question_index + 1) == questionDataForFirstActivity.questions.Count)
+        {//still continue with this activity
+            return false;
+        }*/
+        else if ((question_index_for_second + 1) > questionDataForSecondActivity.questions.Count)
+        {//new activity
+            return true;
+        }
+        else//new activity
+            return true;
+    }
 	
 	/*//Use this to see if user selected correct answer
 	public bool CorrectAnswerSelected(int selectedAnswerID) {

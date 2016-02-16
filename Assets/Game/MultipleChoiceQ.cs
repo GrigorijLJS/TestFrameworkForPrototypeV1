@@ -49,19 +49,19 @@ using System;
 public class QuestionManager : MonoBehaviour {
 	[SerializeField]
 	private TextAsset questionDataXMLFile;
-	private QuestionData questionData;
+	private QuestionData questionDataForFirstActivity;
 	private Question currentQuestion;
 	
 	void Start() {
-		questionData = QuestionData.LoadFromText(questionDataXMLFile.text);
+		questionDataForFirstActivity = QuestionData.LoadFromText(questionDataXMLFile.text);
 	}
 	
 	// Call this when you want a new question
 	public void SetNewQuestion(ref string question) {
 		// gets a random question
 		//System.Random r = new System.Random();
-		int q = UnityEngine.Random.Range(0, questionData.questions.Count - 1);
-		currentQuestion = questionData.questions[q];
+		int q = UnityEngine.Random.Range(0, questionDataForFirstActivity.questions.Count - 1);
+		currentQuestion = questionDataForFirstActivity.questions[q];
 		
 		// add code here to set text values of your Question GameObject
 		// e.g. GetComponent<SomeScript>().Text = currentQuestion.questionText;

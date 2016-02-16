@@ -81,11 +81,13 @@
     <Compile Include="Assets\Game\MainScript.cs" />
     <Compile Include="Assets\Game\MultipleChoiceQ.cs" />
     <Compile Include="Assets\Game\QuestionData.cs" />
+    <Compile Include="Assets\Game\QuestionDataForSecond.cs" />
     <Compile Include="Assets\Game\QuestionManager.cs" />
     <Compile Include="Assets\Game\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\questionData.xml" />
+    <None Include="Assets\questionDataForFirstActivity.xml" />
+    <None Include="Assets\questionDataForSecondActivity.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>
