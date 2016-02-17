@@ -185,10 +185,14 @@ namespace Prototype1v1
 
 			//initialize the hardcoded errors
 			ErrorMetrics errorInRecognizing = new ErrorMetrics();
-			ErrorMetrics errorInRecalling = new ErrorMetrics();
+            ErrorMetrics errorInRecalling = new ErrorMetrics();
+            ErrorMetrics errorInClassifying = new ErrorMetrics();
+            ErrorMetrics errorInImplementing = new ErrorMetrics();
 
 			EncouteredErrorsList.Add("errorInRecognizing",errorInRecognizing);
 			EncouteredErrorsList.Add("errorInRecalling",errorInRecalling);
+            EncouteredErrorsList.Add("errorInClassifying", errorInClassifying);
+            EncouteredErrorsList.Add("errorInImplementing", errorInImplementing);
         }
 
 

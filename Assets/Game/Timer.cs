@@ -266,7 +266,7 @@ namespace Prototype1v1
             }*/
         }
 
-        void SecondActivity(ref string the_question)
+        void SecondActivity()
         {
             if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(quiz_activity_name,
                    out temp_activity_container) &&
@@ -275,8 +275,16 @@ namespace Prototype1v1
 
 
                 DebugInput("Chaos sighted!");
-                //CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the first activity
+                CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the first activity
                 temp_activity_container = null;//empty the container
+
+                mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(classification_activity_name,
+                   out temp_activity_container);
+                temp_activity_container.StartStopOrPauseTimeOnActivityCounter(activity_timer_start);
+
+                CheckForStartOfActivity(ref temp_activity_container, activity_timer_start);
+                //temp_learning_activity_container=null;
+                ongoing_learning_activity_name = quiz_activity_name;
 
                 //StartCoroutine(WaitFunction());
                 //System.Threading.Thread.Sleep(3000);
@@ -288,13 +296,16 @@ namespace Prototype1v1
                 inputField2.ActivateInputField();
                 inputField2.interactable = true;
 
+                QManagObj.NewQuestionForTheSecondActivity(ref the_question);
+
                 inputField2.onEndEdit.AddListener(delegate
                 {
                     new_points = 0;
 
                     //if the following int is 0, the answer is correct, if it is 1 error in recognizing happened
                     //if it is 2 error in recall was made
-                    int corectAnswerOrTypeOfError = /QManagObj.CheckCorrectnessOfAnswer(inputField2.text, ref new_points);
+                    int corectAnswerOrTypeOfError = QManagObj.CheckCorrectnessOfAnswerForSecond
+                        (inputField2.text, ref new_points);
 
                     if (corectAnswerOrTypeOfError == 0)
                     {
@@ -309,7 +320,7 @@ namespace Prototype1v1
                         DebugInput(inputField2.text);
                         inputField2.text = "";
                     }
-                    else
+                    else if(corectAnswerOrTypeOfError==1)
                     {//incorrect answer
                         //the player loses some points
                         mainScriptObj.the_score -= new_points;
@@ -324,18 +335,19 @@ namespace Prototype1v1
 
                         //check the type of the error
 
-                        ErrorMetrics temp_container;
+                        ErrorMetrics temp_error_container;
                         if (corectAnswerOrTypeOfError == 1)
                         {
-
+#warning ova gi dodava greskite na istata aktivnost, isto mislam i gore; treba da go koristime temp_activity_container
                             mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInRecognizing", out temp_container);
-                            temp_container.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+                                .TryGetValue("errorInClassifying", out temp_error_container);
+                            temp_error_container.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
-                            string errorInfo = "ErrorInRecognizing timestamps: " + temp_container.error_time_stamps.Count + "#  ";
-                            for (int i = 0; i < temp_container.error_time_stamps.Count; i++)
+                            string errorInfo = "errorInClassifying timestamps: " + 
+                                temp_error_container.error_time_stamps.Count + "#  ";
+                            for (int i = 0; i < temp_error_container.error_time_stamps.Count; i++)
                             {
-                                errorInfo += temp_container.error_time_stamps[i] + "  ";
+                                errorInfo += temp_error_container.error_time_stamps[i] + "  ";
                             }
                             Debug.LogError(errorInfo);
 
@@ -376,7 +388,7 @@ namespace Prototype1v1
 
             ongoing_learning_activity_name = classification_activity_name;
             //then start the second activity
-            SecondActivity(ref the_question);
+            SecondActivity();
 
         }
 

@@ -185,6 +185,23 @@ public class QuestionManager : MonoBehaviour {
 	}
 
 
+    public int CheckCorrectnessOfAnswerForSecond(string selectedAnswer, ref int new_points)
+    {
+        //save the question's points and use them later to add/subtract points from the game score
+        new_points = currentQuestion.questionScore;
+
+        if (selectedAnswer.Equals(currentQuestion.correctAnswer, StringComparison.OrdinalIgnoreCase))
+        {//correct answer, i.e. the strings are equal
+            return 0;
+        }
+        else
+        {//incorrect answer and an error in classification 
+
+            return 1;
+        }
+    }
+
+
     //based on the solution from: http://stackoverflow.com/questions/6944056/c-sharp-compare-string-similarity
     //from the comments: "The Damereau-Levenshein Distance algorithm calculates the number of letter additions,
     //subtractions, substitutions, and transpositions (swaps) necessary to convert one string to another. The 
