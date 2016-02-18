@@ -85,7 +85,7 @@ namespace Prototype1v1
 			//!!!!!!!!!!!!!!!!!!!
 			//the activity needs to be added to the collection if the limits are to be used
 
-			//activity A
+			//first activity
 			if(!mainScriptObj.playerMetricsObject.gameActivitiesList.ContainsKey(quiz_activity_name))
 			{
 				
@@ -103,21 +103,32 @@ namespace Prototype1v1
 				/*temp_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(2);
 				temp_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(3);
 				temp_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(4);*/
+
+                mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
+                                .TryGetValue("errorInRecognizing", out temp_error_for_first);
+                mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
+                                .TryGetValue("errorInRecall", out temp_error_for_first);
+                mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
+                                .TryGetValue("errorInRecall", out temp_error_for_first);
 			}
 
-			//activity B
+			//second activity
 			if(!mainScriptObj.playerMetricsObject.gameActivitiesList.ContainsKey(classification_activity_name))
 			{
 				
 				mainScriptObj.playerMetricsObject.gameActivitiesList.Add(classification_activity_name,classification_activityObj);
 			}
 			
-			if(mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(classification_activity_name, out temp_activity_container))
+			if(mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue
+                (classification_activity_name, out temp_activity_container))
 			{
 				temp_activity_container.CheckAndStoreInputTimeThreshold(0, 0, 3);
 				temp_activity_container.CheckAndStoreInputTimeThreshold(0, 0, 5);
 				temp_activity_container.CheckAndStoreInputTimeThreshold(0, 0, 7);
-				
+
+                mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
+                                .TryGetValue("errorInClassifying", out temp_error_for_first);
+
 				/*temp_learning_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(2);
 				temp_learning_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(3);
 				temp_learning_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(4);*/
@@ -182,18 +193,19 @@ namespace Prototype1v1
                         //if it is 1 error in recognizing happened, ID: errorInRecognizing
                         //if it is 2 error in recall was made, ID: errorInRecalling 
 
-                        ErrorMetrics temp_container;
+                        ErrorMetrics temp_error_for_first;
                         if (corectAnswerOrTypeOfError == 1)
                         {
 
                             mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInRecognizing", out temp_container);
-                            temp_container.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+                                .TryGetValue("errorInRecognizing", out temp_error_for_first);
+                            temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
-                            string errorInfo = "ErrorInRecognizing timestamps: " + temp_container.error_time_stamps.Count + "#  ";
-                            for (int i = 0; i < temp_container.error_time_stamps.Count; i++)
+                            string errorInfo = "ErrorInRecognizing timestamps: " +
+                                temp_error_for_first.error_time_stamps.Count + "#  ";
+                            for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
                             {
-                                errorInfo += temp_container.error_time_stamps[i] + "  ";
+                                errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
                             }
                             Debug.LogError(errorInfo);
 
@@ -207,13 +219,14 @@ namespace Prototype1v1
                         else
                         {
                             mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInRecalling", out temp_container);
-                            temp_container.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+                                .TryGetValue("errorInRecalling", out temp_error_for_first);
+                            temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
-                            string errorInfo = "ErrorInRecalling timestamps: " + temp_container.error_time_stamps.Count + "#  ";
-                            for (int i = 0; i < temp_container.error_time_stamps.Count; i++)
+                            string errorInfo = "ErrorInRecalling timestamps: " 
+                                + temp_error_for_first.error_time_stamps.Count + "#  ";
+                            for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
                             {
-                                errorInfo += temp_container.error_time_stamps[i] + "  ";
+                                errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
                             }
                             Debug.LogError(errorInfo);
                         }
@@ -271,20 +284,21 @@ namespace Prototype1v1
             if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(quiz_activity_name,
                    out temp_activity_container) &&
                    temp_activity_container.activity_completed)//if the first activity is finished
-            {//but the requirements are met
+            {//start preparing for the second one
 
 
                 DebugInput("Chaos sighted!");
                 CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the first activity
                 temp_activity_container = null;//empty the container
 
+                //and extract the second activity
                 mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(classification_activity_name,
                    out temp_activity_container);
                 temp_activity_container.StartStopOrPauseTimeOnActivityCounter(activity_timer_start);
 
                 CheckForStartOfActivity(ref temp_activity_container, activity_timer_start);
                 //temp_learning_activity_container=null;
-                ongoing_learning_activity_name = quiz_activity_name;
+                ongoing_learning_activity_name = classification_activity_name;
 
                 //StartCoroutine(WaitFunction());
                 //System.Threading.Thread.Sleep(3000);
@@ -293,6 +307,7 @@ namespace Prototype1v1
                 /*inputField.ActivateInputField();
                 inputField.interactable = true;*/
 
+                //enable the second input field
                 inputField2.ActivateInputField();
                 inputField2.interactable = true;
 
@@ -335,30 +350,19 @@ namespace Prototype1v1
 
                         //check the type of the error
 
-                        ErrorMetrics temp_error_container;
-                        if (corectAnswerOrTypeOfError == 1)
+                        ErrorMetrics temp_error_for_second;
+                        mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
+                                .TryGetValue("errorInClassifying", out temp_error_for_second);
+                        temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+
+                        string errorInfo = "errorInClassifying timestamps: " +
+                            temp_error_for_second.error_time_stamps.Count + "#  ";
+                        for (int i = 0; i < temp_error_for_second.error_time_stamps.Count; i++)
                         {
-#warning ova gi dodava greskite na istata aktivnost, isto mislam i gore; treba da go koristime temp_activity_container
-                            mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInClassifying", out temp_error_container);
-                            temp_error_container.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
-
-                            string errorInfo = "errorInClassifying timestamps: " + 
-                                temp_error_container.error_time_stamps.Count + "#  ";
-                            for (int i = 0; i < temp_error_container.error_time_stamps.Count; i++)
-                            {
-                                errorInfo += temp_error_container.error_time_stamps[i] + "  ";
-                            }
-                            Debug.LogError(errorInfo);
-
-                            //string errorinfo = errore + " | " + temp_container.getnumberoferrors() + " timestamps: ";
-                            //for (int i = 0; i < temp_container.getnumberoferrors(); i++)
-                            //{
-                            //    errorinfo += temp_container.error_time_stamps.elementat(i) + "  ";
-                            //}
-                            //debug.logerror(errorinfo);
+                            errorInfo += temp_error_for_second.error_time_stamps[i] + "  ";
                         }
-
+                        Debug.LogError(errorInfo);
+                        
                         inputField2.text = "";
                     }
                     //get a new question
@@ -372,6 +376,17 @@ namespace Prototype1v1
 
                             CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the second activity
                             temp_activity_container = null;//and empty the container
+
+
+                            inputField2.DeactivateInputField();
+                            inputField2.interactable = false;
+
+                            //stop the counting of time in-game
+                            mainScriptObj.playerMetricsObject.timeMetricsObject.StartAndStopTimeCounterSinceBeginningOfGame(false);
+
+                            //give final output
+                            the_question = " ---   GAME OVER! THANK YOU FOR PLAYING!   --- " +
+                                "\n\n\nYour score is: " + mainScriptObj.the_score+"\n\n\n\n";
                         }
                     }
                 });

@@ -190,8 +190,24 @@ public class QuestionManager : MonoBehaviour {
         //save the question's points and use them later to add/subtract points from the game score
         new_points = currentQuestion.questionScore;
 
-        if (selectedAnswer.Equals(currentQuestion.correctAnswer, StringComparison.OrdinalIgnoreCase))
-        {//correct answer, i.e. the strings are equal
+        //split the strings into separate words
+        string[] player_answers = selectedAnswer.Split(' ');
+        string[] correct_answers = currentQuestion.correctAnswer.Split(' ');
+
+        int number_of_correct_items=0;
+        foreach(string corr_answer in correct_answers)
+        {
+            foreach(string play_answ in player_answers)
+            {
+                if(play_answ==corr_answer)
+                {
+                    number_of_correct_items++;
+                }
+            }
+        }
+
+        if (number_of_correct_items==correct_answers.Length && player_answers.Length==correct_answers.Length)
+        {//correct answer, i.e. the strings player_answers and correct_answers contain the same items
             return 0;
         }
         else
