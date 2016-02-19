@@ -72,9 +72,6 @@ namespace Prototype1v1
 
 
 			
-			
-			
-			
 			mainScriptObj = GameObject.Find("GameSystem").GetComponent<MainScript>();
 
 			mainScriptObj.playerMetricsObject.timeMetricsObject.StartAndStopTimeCounterSinceBeginningOfGame(true);
@@ -82,8 +79,7 @@ namespace Prototype1v1
 			/*mainScriptObj.playerMetricsObject.timeMetricsObject.CheckAndStoreInputGameTimeLimit(0, 0, 3);
 			mainScriptObj.playerMetricsObject.timeMetricsObject.CheckAndStoreInputGameTimeLimit(0, 0, 5);*/
 
-			//!!!!!!!!!!!!!!!!!!!
-			//the activity needs to be added to the collection if the limits are to be used
+
 
 			//first activity
 			if(!mainScriptObj.playerMetricsObject.gameActivitiesList.ContainsKey(quiz_activity_name))
@@ -104,12 +100,18 @@ namespace Prototype1v1
 				temp_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(3);
 				temp_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(4);*/
 
-                mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInRecognizing", out temp_error_for_first);
-                mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInRecall", out temp_error_for_first);
-                mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInRecall", out temp_error_for_first);
+                ErrorMetrics temp_err_cont;
+                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInRecognizing", out temp_err_cont);
+                temp_err_cont.StoreInputThresholdsToNumberOfErrors(1);
+                temp_err_cont = null;
+
+                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInRecalling", out temp_err_cont);
+                temp_err_cont.StoreInputThresholdsToNumberOfErrors(2);
+                temp_err_cont = null;
+
+                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInImplementing", out temp_err_cont);
+                temp_err_cont.StoreInputThresholdsToNumberOfErrors(3);
+                temp_err_cont = null;
 			}
 
 			//second activity
@@ -126,8 +128,15 @@ namespace Prototype1v1
 				temp_activity_container.CheckAndStoreInputTimeThreshold(0, 0, 5);
 				temp_activity_container.CheckAndStoreInputTimeThreshold(0, 0, 7);
 
-                mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInClassifying", out temp_error_for_first);
+
+                ErrorMetrics temp_error_cont;
+                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInClassifying", out temp_error_cont);
+                temp_error_cont.StoreInputThresholdsToNumberOfErrors(4);
+                temp_error_cont = null;
+
+                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInImplementing", out temp_error_cont);
+                temp_error_cont.StoreInputThresholdsToNumberOfErrors(3);
+                temp_error_cont = null;
 
 				/*temp_learning_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(2);
 				temp_learning_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(3);
@@ -160,7 +169,7 @@ namespace Prototype1v1
                     new_points = 0;
 
                     //if the following int is 0, the answer is correct, if it is 1 error in recognizing happened
-                    //if it is 2 error in recall was made
+                    //if it is 2 error in recall was made, and 3 is for error in implementing 
                     int corectAnswerOrTypeOfError = QManagObj.CheckCorrectnessOfAnswer(inputField.text, ref new_points);
 
                     if (corectAnswerOrTypeOfError == 0)
@@ -197,7 +206,7 @@ namespace Prototype1v1
                         if (corectAnswerOrTypeOfError == 1)
                         {
 
-                            mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
+                            temp_activity_container.EncouteredErrorsList
                                 .TryGetValue("errorInRecognizing", out temp_error_for_first);
                             temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
@@ -209,6 +218,9 @@ namespace Prototype1v1
                             }
                             Debug.LogError(errorInfo);
 
+
+                            mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container,ref would_be_hint);
+                            hint.text = would_be_hint;
                             //string errorinfo = errore + " | " + temp_container.getnumberoferrors() + " timestamps: ";
                             //for (int i = 0; i < temp_container.getnumberoferrors(); i++)
                             //{
@@ -216,9 +228,9 @@ namespace Prototype1v1
                             //}
                             //debug.logerror(errorinfo);
                         }
-                        else
+                        else if (corectAnswerOrTypeOfError==2)
                         {
-                            mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
+                            temp_activity_container.EncouteredErrorsList
                                 .TryGetValue("errorInRecalling", out temp_error_for_first);
                             temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
@@ -229,6 +241,26 @@ namespace Prototype1v1
                                 errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
                             }
                             Debug.LogError(errorInfo);
+
+                            mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                            hint.text = would_be_hint;
+                        }
+                        else if (corectAnswerOrTypeOfError == 3)
+                        {
+                            temp_activity_container.EncouteredErrorsList
+                                .TryGetValue("errorInImplementing", out temp_error_for_first);
+                            temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+
+                            string errorInfo = "errorInImplementing timestamps: "
+                                + temp_error_for_first.error_time_stamps.Count + "#  ";
+                            for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
+                            {
+                                errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
+                            }
+                            Debug.LogError(errorInfo);
+
+                            mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                            hint.text = would_be_hint;
                         }
 
                         inputField.text = "";
@@ -335,35 +367,73 @@ namespace Prototype1v1
                         DebugInput(inputField2.text);
                         inputField2.text = "";
                     }
-                    else if(corectAnswerOrTypeOfError==1)
-                    {//incorrect answer
-                        //the player loses some points
-                        mainScriptObj.the_score -= new_points;
-
-                        //update the diagnostic system about the score changes
-                        mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
-                        //and check the rules for the score
-                        mainScriptObj.CheckTheGameScoreAndItsRules();
-
-                        DebugInput("Red 'unz Go Fasta!!!!" + inputField2.text);
-                        //mainScriptObj.CheckForErrors();
-
-                        //check the type of the error
-
-                        ErrorMetrics temp_error_for_second;
-                        mainScriptObj.playerMetricsObject.activityMetricsObject.EncouteredErrorsList
-                                .TryGetValue("errorInClassifying", out temp_error_for_second);
-                        temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
-
-                        string errorInfo = "errorInClassifying timestamps: " +
-                            temp_error_for_second.error_time_stamps.Count + "#  ";
-                        for (int i = 0; i < temp_error_for_second.error_time_stamps.Count; i++)
+                    else
+                    {//incorrect answers
+                        if (corectAnswerOrTypeOfError == 1)
                         {
-                            errorInfo += temp_error_for_second.error_time_stamps[i] + "  ";
+                            //the player loses some points
+                            mainScriptObj.the_score -= new_points;
+
+                            //update the diagnostic system about the score changes
+                            mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
+                            //and check the rules for the score
+                            mainScriptObj.CheckTheGameScoreAndItsRules();
+
+                            DebugInput("Red 'unz Go Fasta!!!!" + inputField2.text);
+                            //mainScriptObj.CheckForErrors();
+
+                            //check the type of the error
+
+                            ErrorMetrics temp_error_for_second;
+                            temp_activity_container.EncouteredErrorsList.TryGetValue("errorInClassifying", out temp_error_for_second);
+                            temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+
+                            string errorInfo = "errorInClassifying timestamps: " +
+                                temp_error_for_second.error_time_stamps.Count + "#  ";
+                            for (int i = 0; i < temp_error_for_second.error_time_stamps.Count; i++)
+                            {
+                                errorInfo += temp_error_for_second.error_time_stamps[i] + "  ";
+                            }
+                            Debug.LogError(errorInfo);
+
+                            mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                            hint.text = would_be_hint;
+
+                            inputField2.text = "";
                         }
-                        Debug.LogError(errorInfo);
-                        
-                        inputField2.text = "";
+                        else if(corectAnswerOrTypeOfError == 2)
+                        {
+                            //the player loses some points
+                            mainScriptObj.the_score -= new_points;
+
+                            //update the diagnostic system about the score changes
+                            mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
+                            //and check the rules for the score
+                            mainScriptObj.CheckTheGameScoreAndItsRules();
+
+                            DebugInput("Red 'unz Go Fasta!!!!" + inputField2.text);
+                            //mainScriptObj.CheckForErrors();
+
+                            //check the type of the error
+
+                            ErrorMetrics temp_error_for_second;
+                            temp_activity_container.EncouteredErrorsList.TryGetValue("errorInImplementing",
+                                out temp_error_for_second);
+                            temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+
+                            string errorInfo = "errorInImplementing timestamps: " +
+                                temp_error_for_second.error_time_stamps.Count + "#  ";
+                            for (int i = 0; i < temp_error_for_second.error_time_stamps.Count; i++)
+                            {
+                                errorInfo += temp_error_for_second.error_time_stamps[i] + "  ";
+                            }
+                            Debug.LogError(errorInfo);
+
+                            mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                            hint.text = would_be_hint;
+
+                            inputField2.text = "";
+                        }
                     }
                     //get a new question
                     if (QManagObj.NewQuestionForTheSecondActivity(ref the_question))
@@ -470,7 +540,7 @@ namespace Prototype1v1
 			
 			//mainScriptObj.rulesObject.CheckRulesForTimeMetrics(ref would_be_hint);
 			
-			mainScriptObj.rulesObject.CheckRulesForErrors(ref would_be_hint);
+			//mainScriptObj.rulesObject.CheckRulesForErrors(ref would_be_hint);
 
 			hint.text = would_be_hint;
 

@@ -138,10 +138,10 @@ namespace Prototype1v1
 			}
 		}
 
-		public void CheckRulesForErrors(ref string would_be_hint)
+        public void CheckRulesForErrors(ref ActivityMetrics activity_container, ref string would_be_hint)
 		{
 			//check the rules for the errors and their limits 
-			foreach(var error in playerMetricsObject.activityMetricsObject.EncouteredErrorsList)
+            foreach (var error in activity_container.EncouteredErrorsList)
 			{
 				int i=0;
 				foreach(var error_limit in error.Value.error_number_thresholds)

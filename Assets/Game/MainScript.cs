@@ -184,6 +184,9 @@ namespace Prototype1v1
 		
 		public void CheckForErrors()
 		{
+			string error_indicator = "";
+
+            //rulesObject.CheckRulesForErrors(ref error_indicator);
 
 			if (Input.GetKeyDown(KeyCode.E) == true)
 			{

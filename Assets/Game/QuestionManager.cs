@@ -130,12 +130,16 @@ public class QuestionManager : MonoBehaviour {
 		//save the question's points and use them later to add/subtract points from the game score
 		new_points=currentQuestion.questionScore;
 
+        //a shortcut in case the selectedAnser is empty - which is an error in implementing
+        if (selectedAnswer == "" || selectedAnswer == null)
+            return 3;
+
 		if(selectedAnswer.Equals(currentQuestion.correctAnswer, StringComparison.OrdinalIgnoreCase))
 		{//correct answer, i.e. the strings are equal
 			return 0;
 		}
 		else
-		{//incorrect answer
+		{//incorrect answers
 
 			/*//error in recognizing happens if the two strings partly match???
             if (currentQuestion.correctAnswer.Contains(selectedAnswer))
@@ -189,6 +193,10 @@ public class QuestionManager : MonoBehaviour {
     {
         //save the question's points and use them later to add/subtract points from the game score
         new_points = currentQuestion.questionScore;
+
+        //a shortcut in case the selectedAnser is empty - which is an error in implementing
+        if (selectedAnswer == "" || selectedAnswer == null)
+            return 2;
 
         //split the strings into separate words
         string[] player_answers = selectedAnswer.Split(' ');
