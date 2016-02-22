@@ -31,6 +31,12 @@ namespace Prototype1v1
 			set;
 		}
 
+        public Logger logObj
+        {
+            get;
+            set;
+        }
+
 		public int the_score 
 		{
 			get;
@@ -41,8 +47,11 @@ namespace Prototype1v1
 		{
 			playerMetricsObject = new PlayerMetrics();
 			rulesObject = new DiagnosticRules();
+            logObj = new Logger();
 
-			
+            //in order to print the data at the end the objects need to point to the same thing
+            logObj.rulesObj = rulesObject;
+
 			//playerMetricsObject.activityMetricsObject = taskObj;
 			
 			rulesObject.playerMetricsObject = playerMetricsObject;
@@ -178,13 +187,13 @@ namespace Prototype1v1
 			string score_indicator = "";
 			rulesObject.CheckThresholdsForGameScore(ref score_indicator);
 			//rulesObject.SuddenIncreaseOrDecreaseInGameScore();
-			Debug.Log("score_indicator: "+score_indicator+" ;score "+playerMetricsObject.game_score);
+			Debug.Log("Score indicator: "+score_indicator+" ;score "+playerMetricsObject.game_score);
 		}
 		
 		
 		public void CheckForErrors()
 		{
-			string error_indicator = "";
+			//string error_indicator = "";
 
             //rulesObject.CheckRulesForErrors(ref error_indicator);
 

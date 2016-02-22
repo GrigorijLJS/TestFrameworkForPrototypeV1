@@ -159,8 +159,8 @@ namespace Prototype1v1
 			game_score_default_triggers = new List<int>();
 			game_score_thresholds_compared = new List<bool>();
 
-			game_score_default_triggers.Add(10);
-			game_score_default_triggers.Add(20);
+			game_score_default_triggers.Add(3);
+			game_score_default_triggers.Add(23);
         }
 
 

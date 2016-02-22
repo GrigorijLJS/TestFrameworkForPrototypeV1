@@ -101,15 +101,18 @@ namespace Prototype1v1
 				temp_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(4);*/
 
                 ErrorMetrics temp_err_cont;
-                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInRecognizing", out temp_err_cont);
+                temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorRecognizeName
+                    , out temp_err_cont);
                 temp_err_cont.StoreInputThresholdsToNumberOfErrors(1);
                 temp_err_cont = null;
 
-                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInRecalling", out temp_err_cont);
+                temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorRecallName
+                    , out temp_err_cont);
                 temp_err_cont.StoreInputThresholdsToNumberOfErrors(2);
                 temp_err_cont = null;
 
-                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInImplementing", out temp_err_cont);
+                temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorImplementName
+                    , out temp_err_cont);
                 temp_err_cont.StoreInputThresholdsToNumberOfErrors(3);
                 temp_err_cont = null;
 			}
@@ -130,11 +133,13 @@ namespace Prototype1v1
 
 
                 ErrorMetrics temp_error_cont;
-                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInClassifying", out temp_error_cont);
+                temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorClassifyName
+                    , out temp_error_cont);
                 temp_error_cont.StoreInputThresholdsToNumberOfErrors(4);
                 temp_error_cont = null;
 
-                temp_activity_container.EncouteredErrorsList.TryGetValue("errorInImplementing", out temp_error_cont);
+                temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorImplementName
+                    , out temp_error_cont);
                 temp_error_cont.StoreInputThresholdsToNumberOfErrors(3);
                 temp_error_cont = null;
 
@@ -207,7 +212,7 @@ namespace Prototype1v1
                         {
 
                             temp_activity_container.EncouteredErrorsList
-                                .TryGetValue("errorInRecognizing", out temp_error_for_first);
+                                .TryGetValue(temp_activity_container.errorRecognizeName, out temp_error_for_first);
                             temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
                             string errorInfo = "ErrorInRecognizing timestamps: " +
@@ -231,7 +236,7 @@ namespace Prototype1v1
                         else if (corectAnswerOrTypeOfError==2)
                         {
                             temp_activity_container.EncouteredErrorsList
-                                .TryGetValue("errorInRecalling", out temp_error_for_first);
+                                .TryGetValue(temp_activity_container.errorRecallName, out temp_error_for_first);
                             temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
                             string errorInfo = "ErrorInRecalling timestamps: " 
@@ -248,7 +253,7 @@ namespace Prototype1v1
                         else if (corectAnswerOrTypeOfError == 3)
                         {
                             temp_activity_container.EncouteredErrorsList
-                                .TryGetValue("errorInImplementing", out temp_error_for_first);
+                                .TryGetValue(temp_activity_container.errorImplementName, out temp_error_for_first);
                             temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
                             string errorInfo = "errorInImplementing timestamps: "
@@ -385,7 +390,8 @@ namespace Prototype1v1
                             //check the type of the error
 
                             ErrorMetrics temp_error_for_second;
-                            temp_activity_container.EncouteredErrorsList.TryGetValue("errorInClassifying", out temp_error_for_second);
+                            temp_activity_container.EncouteredErrorsList.TryGetValue(
+                                temp_activity_container.errorClassifyName, out temp_error_for_second);
                             temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
                             string errorInfo = "errorInClassifying timestamps: " +
@@ -417,8 +423,8 @@ namespace Prototype1v1
                             //check the type of the error
 
                             ErrorMetrics temp_error_for_second;
-                            temp_activity_container.EncouteredErrorsList.TryGetValue("errorInImplementing",
-                                out temp_error_for_second);
+                            temp_activity_container.EncouteredErrorsList.TryGetValue(
+                                temp_activity_container.errorImplementName, out temp_error_for_second);
                             temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
                             string errorInfo = "errorInImplementing timestamps: " +
@@ -457,6 +463,8 @@ namespace Prototype1v1
                             //give final output
                             the_question = " ---   GAME OVER! THANK YOU FOR PLAYING!   --- " +
                                 "\n\n\nYour score is: " + mainScriptObj.the_score+"\n\n\n\n";
+
+                            mainScriptObj.logObj.WriteLog();
                         }
                     }
                 });

@@ -15,7 +15,11 @@ namespace Prototype1v1
             set;
         }
 
-        
+        public Indicators indicatorsObject
+        {
+            get;
+            set;
+        }
 
         //
 		public bool game_time_limit_reached 
@@ -42,6 +46,8 @@ namespace Prototype1v1
 			//used to track which task time limit should be used next
 			game_time_limit_reached = false;
 			task_time_limit_reached = false;
+
+            indicatorsObject = new Indicators();
         }
 
 
@@ -110,6 +116,19 @@ namespace Prototype1v1
 				i++;
 			}*/
 
+            //the ID/name for the indicator
+            string score_increase_or_decrease_indicator_ID = "";
+
+            //check if the player lost or gained points
+            if((playerMetricsObject.game_score-playerMetricsObject.game_score_previous_state)>0)
+            {
+                score_increase_or_decrease_indicator_ID="scoreIncrease";
+            }
+            else if((playerMetricsObject.game_score-playerMetricsObject.game_score_previous_state)<0)
+            {
+                score_increase_or_decrease_indicator_ID = "scoreDecrease";
+            }
+
 			//the absolute value of the change of the score
 			int absolute_score=Math.Abs(playerMetricsObject.game_score-playerMetricsObject.game_score_previous_state);
 
@@ -122,21 +141,110 @@ namespace Prototype1v1
 					if(absolute_score>=playerMetricsObject.game_score_triggers.ElementAt(i) &&
 					   absolute_score<playerMetricsObject.game_score_triggers.ElementAt(i+1))
 					{//check if the change to the score is between the current trigger and the next one
-						score_indicator = "Score indicator " + (i) + " activated!";
 						
+                        //the indicator printed in the game
+                        score_indicator = "Score indicator " + (i) + " activated!";
+
+                        //attach the value that activated the indicator
+                        score_increase_or_decrease_indicator_ID += ";"+playerMetricsObject.game_score_triggers.ElementAt(i);
+                        //and send the main indicator 
+                        indicatorsObject.StoreMainIndicator(score_increase_or_decrease_indicator_ID);
 					}
 
 				}
                 else //if it is the last inflation/deflation trigger
 				{
 					if(absolute_score>=playerMetricsObject.game_score_triggers.ElementAt(i))
-					{//just comapre the change to the trigger
+                    {//just comapre the change to the trigger
+
+                        //the indicator printed in the game
 						score_indicator = "Score indicator " + (i) + " activated!";
+
+                        //attach the value that activated the indicator
+                        score_increase_or_decrease_indicator_ID += ";"+playerMetricsObject.game_score_triggers.ElementAt(i);
+                        //and send the main indicator 
+                        indicatorsObject.StoreMainIndicator(score_increase_or_decrease_indicator_ID);
+
 						
 					}
 				}
 			}
 		}
+
+
+        public void CheckRulesForActivityMetrics(ref ActivityMetrics temp_activity_container, ref string would_be_hint)
+        {
+            string time_on_activity_threshold_ID="timeOnActivityThreshold";
+            //compare the time time-on-activity with the time thresholds 
+
+            if (temp_activity_container.current_task_time_limit_index + 1 <=
+               temp_activity_container.time_on_activity_thresholds.Count)
+            {
+
+                //CompareCurrentTaskTimeWithTaskTimeLimit();
+                //-----------------
+                if (temp_activity_container.time_on_activity.Elapsed
+                    > temp_activity_container.time_on_activity_thresholds.ElementAt
+                    (temp_activity_container.current_task_time_limit_index)
+                    && temp_activity_container.time_on_activity_threshold_compared
+                    [temp_activity_container.current_task_time_limit_index] != true)
+                {
+
+                    temp_activity_container.time_on_activity_threshold_compared[
+                        temp_activity_container.current_task_time_limit_index] = true;
+                }
+
+                //-------------
+            }
+
+
+            if (temp_activity_container.current_task_time_limit_index + 1 <=
+               temp_activity_container.time_on_activity_thresholds.Count)
+            {
+                if (temp_activity_container.time_on_activity_threshold_compared
+                    [temp_activity_container.current_task_time_limit_index])
+                {
+
+                    would_be_hint = "Task Over, man! Task Over! " +
+                        (temp_activity_container.current_task_time_limit_index+1)
+                        + " out of " + temp_activity_container.time_on_activity_thresholds.Count;
+
+                    //send the indicator and its index to be stored or have its occurence incremented (if it already exists)
+                    indicatorsObject.StoreMainIndicator(time_on_activity_threshold_ID);
+
+                    temp_activity_container.current_task_time_limit_index++;
+                }
+
+            }
+
+
+            /*//compare number of attempts limit
+
+
+            int i = 0;
+            foreach (var number_of_attempts_limit in temp_activity_container.limits_to_number_of_tries_to_solve)
+            {
+                if (number_of_attempts_limit == temp_activity_container.number_of_tries_to_solve)
+                {
+                    if (!temp_activity_container.compared_limits_to_number_of_tries_to_solve[i])
+                    {
+                        temp_activity_container.compared_limits_to_number_of_tries_to_solve[i] = true;
+
+                        //CheckRulesForHintMetrics(error.Key, ref would_be_hint);
+                        would_be_hint = "Task: " + ", number_of_attempts_limit: "
+                            + number_of_attempts_limit + ", number: " + temp_activity_container.number_of_tries_to_solve;
+
+                    }
+                }
+                i++;
+            }*/
+
+
+
+
+        }
+		
+		
 
         public void CheckRulesForErrors(ref ActivityMetrics activity_container, ref string would_be_hint)
 		{
@@ -158,6 +266,8 @@ namespace Prototype1v1
 							would_be_hint = "Error: "+error.Key.ToString()+", limit: "+error_limit+
 								", number: "+error.Value.GetNumberOfErrors();
 
+                            //send the indicator (per error type)
+                            indicatorsObject.StoreMainIndicator(error.Key.ToString() + "Threshold");
 						}
 					}
 					i++;
@@ -331,75 +441,6 @@ namespace Prototype1v1
 		}
 
 
-		public void CheckRulesForActivityMetrics(ref ActivityMetrics temp_activity_container, ref string would_be_hint)
-		{
-			//compare time limit
-
-			if(temp_activity_container.current_task_time_limit_index+1<=
-			   temp_activity_container.time_on_activity_thresholds.Count)
-			{
-				
-				//CompareCurrentTaskTimeWithTaskTimeLimit();
-				//-----------------
-				if (temp_activity_container.time_on_activity.Elapsed
-				    > temp_activity_container.time_on_activity_thresholds.ElementAt
-				    (temp_activity_container.current_task_time_limit_index) 
-				    && temp_activity_container.time_on_activity_threshold_compared
-				    [temp_activity_container.current_task_time_limit_index]!= true)
-				{
-					
-					temp_activity_container.time_on_activity_threshold_compared[
-						temp_activity_container.current_task_time_limit_index] = true;
-				}
-				
-				//-------------
-			}
-			
-			
-			if(temp_activity_container.current_task_time_limit_index+1<=
-			   temp_activity_container.time_on_activity_thresholds.Count)
-			{
-				if (temp_activity_container.time_on_activity_threshold_compared
-				    [temp_activity_container.current_task_time_limit_index])
-				{
-					
-					would_be_hint= "Task Over, man! Task Over! "+
-						temp_activity_container.current_task_time_limit_index
-						+" out of "+(temp_activity_container.time_on_activity_thresholds.Count-1);
-					
-					temp_activity_container.current_task_time_limit_index++;
-				}
-				
-			}
-
-			
-			//compare number of attempts limit
-
-
-			int i=0;
-			foreach(var number_of_attempts_limit in temp_activity_container.limits_to_number_of_tries_to_solve)
-			{
-				if(number_of_attempts_limit==temp_activity_container.number_of_tries_to_solve)
-				{
-					if(!temp_activity_container.compared_limits_to_number_of_tries_to_solve[i])
-					{
-						temp_activity_container.compared_limits_to_number_of_tries_to_solve[i] = true;
-						
-						//CheckRulesForHintMetrics(error.Key, ref would_be_hint);
-						would_be_hint = "Task: "+", number_of_attempts_limit: "
-							+number_of_attempts_limit+", number: "+temp_activity_container.number_of_tries_to_solve;
-						
-					}
-				}
-				i++;
-			}
-
-
-
-
-		}
-		
-		
 		
 	
 

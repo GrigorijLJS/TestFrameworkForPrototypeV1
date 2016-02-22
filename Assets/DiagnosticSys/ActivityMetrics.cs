@@ -28,6 +28,27 @@ namespace Prototype1v1
             set;
         }
 
+        public string errorRecognizeName
+        {
+            get;
+            private set;
+        }
+
+        public string errorRecallName
+        {
+            get;
+            private set;
+        }
+        public string errorImplementName
+        {
+            get;
+            private set;
+        }
+        public string errorClassifyName
+        {
+            get;
+            private set;
+        }
         //used to store the hints given to the players (by type), # of times they were given 
         //and the timestamps when they were given
         //private Dictionary<string, HintMetrics> givenHintsList;
@@ -77,7 +98,6 @@ namespace Prototype1v1
 		}
 
         //collection for storing the time used on this task/turn/quest 
-        //!!!!!!!!!!!!!!!!store if task was completed succesfully
 		public List<TimeSpan> list_of_times_on_activity
 		{
 			get;
@@ -183,16 +203,20 @@ namespace Prototype1v1
 
 			activity_completed = false;
 
-			//initialize the hardcoded errors
+			//initialize the hardcoded errors and their names/IDs
 			ErrorMetrics errorInRecognizing = new ErrorMetrics();
+            errorRecognizeName = "errorInRecognizing";
             ErrorMetrics errorInRecalling = new ErrorMetrics();
+            errorRecallName = "errorInRecalling";
             ErrorMetrics errorInClassifying = new ErrorMetrics();
+            errorClassifyName="errorInClassifying";
             ErrorMetrics errorInImplementing = new ErrorMetrics();
+            errorImplementName="errorInImplementing";
 
-			EncouteredErrorsList.Add("errorInRecognizing",errorInRecognizing);
-			EncouteredErrorsList.Add("errorInRecalling",errorInRecalling);
-            EncouteredErrorsList.Add("errorInClassifying", errorInClassifying);
-            EncouteredErrorsList.Add("errorInImplementing", errorInImplementing);
+			EncouteredErrorsList.Add(errorRecognizeName,errorInRecognizing);
+			EncouteredErrorsList.Add(errorRecallName,errorInRecalling);
+            EncouteredErrorsList.Add(errorClassifyName, errorInClassifying);
+            EncouteredErrorsList.Add(errorImplementName, errorInImplementing);
         }
 
 
