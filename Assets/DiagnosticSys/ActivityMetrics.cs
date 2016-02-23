@@ -123,6 +123,19 @@ namespace Prototype1v1
             set;
         }
 
+        //Assumed prior knowledge/skills/info for this activity
+        public List<string> prerequisite_knowledge
+        {
+            get;
+            set;
+        }
+
+        public string learning_goal
+        {
+            get;
+            set;
+        }
+
         //task score
         //!!!!!!!!!!!!!!!!!!!
         private int task_score
@@ -141,11 +154,6 @@ namespace Prototype1v1
 		}
 
 
-		public List<bool> time_on_activity_threshold_compared
-		{
-			get;
-			set;
-		}
 		/*
 		public bool GetTask_time_limit_compared(int index)
 		{
@@ -173,11 +181,23 @@ namespace Prototype1v1
 			get;
 			set;
 		}
+
+        public List<bool> time_on_activity_threshold_compared
+        {
+            get;
+            set;
+        }
           ////////
          ////////
         ////////
 
         public List<TimeSpan> default_time_on_activity_thresholds
+        {
+            get;
+            set;
+        }
+
+        public List<bool> default_time_on_activity_threshold_compared
         {
             get;
             set;
@@ -194,6 +214,9 @@ namespace Prototype1v1
 
 			time_on_activity_thresholds = new List<TimeSpan>();
 			time_on_activity_threshold_compared = new List<bool>();
+
+            default_time_on_activity_thresholds = new List<TimeSpan>();
+            default_time_on_activity_threshold_compared = new List<bool>();
 
 			current_task_time_limit_index=0;
             //time_on_activity_threshold_compared = new List<bool>();

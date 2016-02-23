@@ -100,6 +100,20 @@ namespace Prototype1v1
 
 		}*/
 
+        public void CheckThresholdsForMainIndicators()
+        {
+            foreach(var main_indicator in indicatorsObject.mainIndicators)
+            {
+                foreach(var main_indicator_threshold in indicatorsObject.mainIndicators_thresholds)
+                {
+                    if(main_indicator.Value==main_indicator_threshold)
+                    {
+                        indicatorsObject.StoreAuxiliaryIndicator(main_indicator.Key);
+                    }
+                }
+            }
+        }
+
 		public void CheckThresholdsForGameScore(ref string score_indicator)
 		{
 			/*int i=0;
