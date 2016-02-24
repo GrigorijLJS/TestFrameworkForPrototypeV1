@@ -49,7 +49,9 @@ namespace Prototype1v1
 		private ActivityMetrics temp_activity_container;
 
         public InputField inputField;
-        public InputField inputField2; 
+        public InputField inputField2;
+
+        public Dropdown Dropdown_Menu;
 
 		
 		private QuestionManager QManagObj = new QuestionManager();
@@ -154,8 +156,11 @@ namespace Prototype1v1
             inputField2.DeactivateInputField();
             inputField2.interactable = false;
 
+
+
+
 			//get a new question
-			QManagObj.NewQuestionForTheFirstActivity(ref the_question);
+            QManagObj.NewQuestionForTheFirstActivity(ref the_question, ref Dropdown_Menu);
 
             //first task
             if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(quiz_activity_name,
@@ -169,6 +174,12 @@ namespace Prototype1v1
 
             if (ongoing_learning_activity_name == quiz_activity_name)
             {
+
+                Dropdown_Menu.onValueChanged.AddListener(delegate
+                {
+
+                });
+
                 inputField.onEndEdit.AddListener(delegate
                 {
                     new_points = 0;
@@ -271,7 +282,7 @@ namespace Prototype1v1
                         inputField.text = "";
                     }
                     //get a new question
-                    if (QManagObj.NewQuestionForTheFirstActivity(ref the_question))
+                    if (QManagObj.NewQuestionForTheFirstActivity(ref the_question, ref Dropdown_Menu))
                     {
                         //reset the question var to empty
                         //the_question = "";
@@ -496,7 +507,7 @@ namespace Prototype1v1
 		
 		void Update()
         {
-			timer.text = the_question+ "\nTime since start of game "+
+			timer.text = the_question+ "\nTime since start of game(to be removed) "+
 				mainScriptObj.playerMetricsObject.timeMetricsObject.time_since_beginning_of_game.Elapsed.ToString();
 
 			//CheckForStartOfActivity(ref temp_learning_activity_container);
@@ -537,7 +548,7 @@ namespace Prototype1v1
 			if(temp_activity_container!=null)
             {
 
-				timer.text +="\ntime-on-activity "+
+				timer.text +="\ntime-on-activity(to be removed) "+
 					temp_activity_container.time_on_activity.Elapsed.ToString();
 				
 				mainScriptObj.rulesObject.CheckRulesForActivityMetrics(ref temp_activity_container,

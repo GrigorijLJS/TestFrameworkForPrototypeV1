@@ -7,6 +7,8 @@ using System.IO;
 using UnityEngine;
 using System.Collections;
 
+using UnityEngine.UI;
+
 public class QuestionManager : MonoBehaviour {
 	[SerializeField]
 	///*private*/public TextAsset questionDataXMLFile;
@@ -35,7 +37,7 @@ public class QuestionManager : MonoBehaviour {
 	}
 	
 	// Call this when you want a new question for the first activity
-	public bool NewQuestionForTheFirstActivity(ref string the_question) 
+    public bool NewQuestionForTheFirstActivity(ref string the_question, ref Dropdown Dropdown_Menu) 
 	{
 		if(questionDataForFirstActivity==null)
         {
@@ -58,8 +60,21 @@ public class QuestionManager : MonoBehaviour {
                 "     "+currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5 
                 + "     " +currentQuestion.answer6 + "     " + currentQuestion.answer7 + "     " + currentQuestion.answer8 
-                + "     " +currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n"+"correct answer: " 
+                + "     " +currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n"+": " 
                 + currentQuestion.correctAnswer+"\n";
+
+            //clear the choices in the dropdown and add the answers
+            Dropdown_Menu.options.Clear();
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer1 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer2 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer3 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer4 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer5 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer6 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer7 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer8 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer9 });
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer10 });
         }
 
         if ((question_index + 1) <= questionDataForFirstActivity.questions.Count)
@@ -98,7 +113,7 @@ public class QuestionManager : MonoBehaviour {
                 "     " + currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5
                 + "     " + currentQuestion.answer6 + "     " + currentQuestion.answer7 + "     " + currentQuestion.answer8
-                + "     " + currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n" + "correct answer: "
+                + "     " + currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n" + ": "
                 + currentQuestion.correctAnswer + "\n";
         }
 
