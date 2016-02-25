@@ -56,12 +56,14 @@ public class QuestionManager : MonoBehaviour {
 
             // add code here to set text values of your Question GameObject
             // e.g. GetComponent<SomeScript>().Text = currentQuestion.questionText;
-            the_question ="Question: " +currentQuestion.questionText + " \n\nChoices: " + currentQuestion.answer1 +
+            the_question = "Question: " + currentQuestion.questionText + "\n\nquestion # " + (question_index+1)+" out of "
+                + questionDataForFirstActivity.questions.Count + "\n\n\n";
+            /* +" \n\nChoices: " + currentQuestion.answer1 +
                 "     "+currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5 
                 + "     " +currentQuestion.answer6 + "     " + currentQuestion.answer7 + "     " + currentQuestion.answer8 
                 + "     " +currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n"+": " 
-                + currentQuestion.correctAnswer+"\n";
+                + currentQuestion.correctAnswer+"\n";*/
 
             //clear the choices in the dropdown and add the answers
             Dropdown_Menu.options.Clear();
