@@ -29,6 +29,11 @@ namespace Prototype1v1
             set;
         }
 
+        public DiagnosticRules rulesObject
+        {
+            get;
+            set;
+        }
         /*public ErrorMetrics errorMetricsObject
         {
             get;
@@ -150,6 +155,7 @@ namespace Prototype1v1
 
             timeMetricsObject = new TimeMetrics();
             activityMetricsObject = new ActivityMetrics();
+            //rulesObject = new DiagnosticRules();
 
 			game_score=0;
 			game_score_previous_state=0;
@@ -263,6 +269,30 @@ namespace Prototype1v1
         }
 
 
+        public string IdentifyAndStoreErrorForThisActivity(string current_activity_ID, string error_ID)
+        {
+            ActivityMetrics current_activity = null;
+            ErrorMetrics temp_error_for_first=null;
+            string would_be_hint="";
+
+            gameActivitiesList.TryGetValue(current_activity_ID, out current_activity);
+
+            current_activity.EncouteredErrorsList
+                                        .TryGetValue(error_ID, out temp_error_for_first);
+            temp_error_for_first.ErrorMade(current_activity.time_on_activity.Elapsed);
+
+            string errorInfo = error_ID+" timestamps: "
+                + temp_error_for_first.error_time_stamps.Count + "#  ";
+
+            for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
+            {
+                errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
+            }
+
+            //rulesObject.CheckRulesForErrors(ref current_activity, ref would_be_hint);
+
+            return ("Hint: "+would_be_hint+" info for errors "+errorInfo);
+        }
 
         
     }

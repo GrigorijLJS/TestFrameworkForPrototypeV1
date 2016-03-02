@@ -19,6 +19,8 @@ public class QuestionManager : MonoBehaviour {
     private int question_index;
     private int question_index_for_second;
 
+    private string correct_from_previous;
+
 
 	public QuestionManager()
 	{
@@ -26,6 +28,8 @@ public class QuestionManager : MonoBehaviour {
         question_index_for_second = 0;
         questionDataForFirstActivity = null;
         questionDataForSecondActivity = null;
+
+        correct_from_previous = "";
 		//questionDataForFirstActivity = QuestionData.LoadFromText(Application.dataPath+"/Game/questionDataXMLFile.xml");
 		//questionDataForFirstActivity = QuestionData.LoadFromText(questionDataXMLFile.xml);
 	}
@@ -37,7 +41,7 @@ public class QuestionManager : MonoBehaviour {
 	}
 	
 	// Call this when you want a new question for the first activity
-    public bool NewQuestionForTheFirstActivity(ref string the_question, ref Dropdown Dropdown_Menu) 
+    public bool NewQuestionForTheFirstActivity(ref string the_question, ref Dropdown Dropdown_Menu, int the_score) 
 	{
 		if(questionDataForFirstActivity==null)
         {
@@ -56,8 +60,9 @@ public class QuestionManager : MonoBehaviour {
 
             // add code here to set text values of your Question GameObject
             // e.g. GetComponent<SomeScript>().Text = currentQuestion.questionText;
-            the_question = "Question: " + currentQuestion.questionText + "\n\nquestion # " + (question_index+1)+" out of "
-                + questionDataForFirstActivity.questions.Count + "\n\n\n";
+            the_question = correct_from_previous+"Question: " + 
+                currentQuestion.questionText + "\n\nquestion # " + (question_index+1)+" out of "
+                + questionDataForFirstActivity.questions.Count + "\n\ncurrent score: " + the_score+"\n\n";
             /* +" \n\nChoices: " + currentQuestion.answer1 +
                 "     "+currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5 
@@ -65,8 +70,16 @@ public class QuestionManager : MonoBehaviour {
                 + "     " +currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n"+": " 
                 + currentQuestion.correctAnswer+"\n";*/
 
+            //Dropdown_Menu.Select();
             //clear the choices in the dropdown and add the answers
+            /*Dropdown_Menu.options.Clear();
+            Dropdown_Menu.value = 0;
+            Dropdown_Menu.captionText = null;*/
+
+            Dropdown_Menu.value = 0;
             Dropdown_Menu.options.Clear();
+
+            Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = "Make your choice!" });
             Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer1 });
             Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer2 });
             Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer3 });
@@ -77,6 +90,7 @@ public class QuestionManager : MonoBehaviour {
             Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer8 });
             Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer9 });
             Dropdown_Menu.options.Add(new Dropdown.OptionData() { text = currentQuestion.answer10 });
+            //Dropdown_Menu.captionText = Dropdown_Menu.captionText;
         }
 
         if ((question_index + 1) <= questionDataForFirstActivity.questions.Count)
@@ -97,7 +111,7 @@ public class QuestionManager : MonoBehaviour {
 	}
 
     //Call this when you want a new question for the second activity
-    public bool NewQuestionForTheSecondActivity(ref string the_question)
+    public bool NewQuestionForTheSecondActivity(ref string the_question,int the_score)
     {
         if (questionDataForSecondActivity == null)
         {
@@ -116,7 +130,7 @@ public class QuestionManager : MonoBehaviour {
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5
                 + "     " + currentQuestion.answer6 + "     " + currentQuestion.answer7 + "     " + currentQuestion.answer8
                 + "     " + currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n" + ": "
-                + currentQuestion.correctAnswer + "\n";
+                + currentQuestion.correctAnswer + "\n" + "\ncurrent score:" + the_score + "\n";
         }
 
         if ((question_index_for_second + 1) <= questionDataForSecondActivity.questions.Count)
@@ -147,16 +161,19 @@ public class QuestionManager : MonoBehaviour {
 		//save the question's points and use them later to add/subtract points from the game score
 		new_points=currentQuestion.questionScore;
 
-        //a shortcut in case the selectedAnser is empty - which is an error in implementing
+        /*//a shortcut in case the selectedAnser is empty - which is an error in implementing
         if (selectedAnswer == "" || selectedAnswer == null)
-            return 3;
+            return 3;*/
 
 		if(selectedAnswer.Equals(currentQuestion.correctAnswer, StringComparison.OrdinalIgnoreCase))
 		{//correct answer, i.e. the strings are equal
+            correct_from_previous = "Correct answer! Here is another question:\n";
 			return 0;
 		}
 		else
-		{//incorrect answers
+        {
+            correct_from_previous = "Wrong answer! The correct answer was "+currentQuestion.correctAnswer+"\n";
+            return 2;
 
 			/*//error in recognizing happens if the two strings partly match???
             if (currentQuestion.correctAnswer.Contains(selectedAnswer))
@@ -166,7 +183,7 @@ public class QuestionManager : MonoBehaviour {
 			//error in recall if the two strings are totally different??? 
 			return false;*/
 
-            //calculate the difference in the strings, i.e. the "distance" between them
+            /*//calculate the difference in the strings, i.e. the "distance" between them
             int differenceInStrings = ComputeDistance(currentQuestion.correctAnswer, selectedAnswer);
 
             int n = 0;//used to check if the answer is a number
@@ -200,7 +217,7 @@ public class QuestionManager : MonoBehaviour {
                     //otherwise it is an error in recall
                     return 2;
                 }
-            }
+            }*/
             
 		}
 	}

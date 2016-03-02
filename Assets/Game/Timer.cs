@@ -12,6 +12,9 @@ namespace Prototype1v1
     public class Timer : MonoBehaviour
     {
 
+        public Text learningText;
+        public Scrollbar scrollbar1;
+
         //public int time;
 		private Text timer;
 		private Text hint;
@@ -74,6 +77,7 @@ namespace Prototype1v1
         
         void Start()
         {
+            SetTheLearningText();
 //            //so the objects of metrics are the same
 //			mainScriptObj.rulesObject.playerMetricsObject = mainScriptObj.playerMetricsObject;
 
@@ -114,20 +118,21 @@ namespace Prototype1v1
 				temp_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(4);*/
 
                 ErrorMetrics temp_err_cont;
-                temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorRecognizeName
+                /*temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorRecognizeName
                     , out temp_err_cont);
                 temp_err_cont.StoreInputThresholdsToNumberOfErrors(1);
-                temp_err_cont = null;
+                temp_err_cont = null;*/
 
                 temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorRecallName
                     , out temp_err_cont);
                 temp_err_cont.StoreInputThresholdsToNumberOfErrors(2);
+                temp_err_cont.StoreInputThresholdsToNumberOfErrors(4);
                 temp_err_cont = null;
 
-                temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorImplementName
+                /*temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorImplementName
                     , out temp_err_cont);
                 temp_err_cont.StoreInputThresholdsToNumberOfErrors(3);
-                temp_err_cont = null;
+                temp_err_cont = null;*/
 			}
 
 			//second activity
@@ -192,7 +197,8 @@ namespace Prototype1v1
 
 
                 //get a new question
-                QManagObj.NewQuestionForTheFirstActivity(ref the_question, ref Dropdown_Menu);
+                Dropdown_Menu.options.Clear();
+                QManagObj.NewQuestionForTheFirstActivity(ref the_question, ref Dropdown_Menu, mainScriptObj.the_score);
 
                 //first task
                 if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(quiz_activity_name,
@@ -206,148 +212,174 @@ namespace Prototype1v1
 
                 if (ongoing_learning_activity_name == quiz_activity_name)
                 {
-                    
+                    //Dropdown_Menu.captionText = Dropdown_Menu.captionText;
+
                     //Dropdown_Menu.options.Clear();
                     //Dropdown_Menu.OnSelect(Dropdown_Menu.onValueChanged);
                     Dropdown_Menu.onValueChanged.AddListener(delegate
                     {
-                        new_points = 0;
-
-                        //if the following int is 0, the answer is correct, if it is 1 error in recognizing happened
-                        //if it is 2 error in recall was made, and 3 is for error in implementing 
-                        int corectAnswerOrTypeOfError = QManagObj.CheckCorrectnessOfAnswer(
-                            Dropdown_Menu.options[Dropdown_Menu.value].text, ref new_points);
-
-
-                        Dropdown_Menu.options.Clear();
-                        Dropdown_Menu.value = 0;
-
-                        if (corectAnswerOrTypeOfError == 0)
+                        if (Dropdown_Menu.options[Dropdown_Menu.value].text.ToString() != "Make your choice!")
                         {
-                            //the player gets some points
-                            mainScriptObj.the_score += new_points;
+                            new_points = 0;
 
-                            //update the diagnostic system about the score changes
-                            mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
-                            //and check the rules for the score
-                            mainScriptObj.CheckTheGameScoreAndItsRules();
+                            //if the following int is 0, the answer is correct, if it is 1 error in recognizing happened
+                            //if it is 2 error in recall was made, and 3 is for error in implementing 
+                            int corectAnswerOrTypeOfError = QManagObj.CheckCorrectnessOfAnswer(
+                                Dropdown_Menu.options[Dropdown_Menu.value].text, ref new_points);
 
-                            DebugInput(inputField.text);
-                            inputField.text = "";
-                        }
-                        else
-                        {//incorrect answer
-                            //the player loses some points
-                            mainScriptObj.the_score -= new_points;
+                            /*int TempInt = Dropdown_Menu.value;
+                            Dropdown_Menu.value = Dropdown_Menu.value + 1;
+                            Dropdown_Menu.value = TempInt;*/
 
-                            //update the diagnostic system about the score changes
-                            mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
-                            //and check the rules for the score
-                            mainScriptObj.CheckTheGameScoreAndItsRules();
+                            //Dropdown_Menu.options.Clear();
+                            //Dropdown_Menu.value = 0;
+                            //Dropdown_Menu.value = 0;
 
-                            DebugInput("WAAAAAAAAAAH!!!" + inputField.text);
-                            //mainScriptObj.CheckForErrors();
-
-                            //check the type of the error
-                            //if it is 1 error in recognizing happened, ID: errorInRecognizing
-                            //if it is 2 error in recall was made, ID: errorInRecalling 
-
-                            ErrorMetrics temp_error_for_first;
-                            if (corectAnswerOrTypeOfError == 1)
+                            if (corectAnswerOrTypeOfError == 0)
                             {
+                                //the player gets some points
+                                mainScriptObj.the_score += new_points;
 
-                                temp_activity_container.EncouteredErrorsList
-                                    .TryGetValue(temp_activity_container.errorRecognizeName, out temp_error_for_first);
-                                temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+                                //update the diagnostic system about the score changes
+                                mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
+                                //and check the rules for the score
+                                mainScriptObj.CheckTheGameScoreAndItsRules();
 
-                                string errorInfo = "ErrorInRecognizing timestamps: " +
-                                    temp_error_for_first.error_time_stamps.Count + "#  ";
-                                for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
-                                {
-                                    errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
-                                }
-                                Debug.LogError(errorInfo);
-
-
-                                mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
-                                hint.text = would_be_hint;
-                                //string errorinfo = errore + " | " + temp_container.getnumberoferrors() + " timestamps: ";
-                                //for (int i = 0; i < temp_container.getnumberoferrors(); i++)
-                                //{
-                                //    errorinfo += temp_container.error_time_stamps.elementat(i) + "  ";
-                                //}
-                                //debug.logerror(errorinfo);
+                                DebugInput(Dropdown_Menu.options[Dropdown_Menu.value].text);
+                                /*DebugInput(inputField.text);
+                                inputField.text = "";*/
+                                the_question += "Correct!";
                             }
-                            else if (corectAnswerOrTypeOfError == 2)
+                            else
+                            {//incorrect answer
+                                //the player loses some points
+                                mainScriptObj.the_score -= new_points;
+
+                                //update the diagnostic system about the score changes
+                                mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
+                                //and check the rules for the score
+                                mainScriptObj.CheckTheGameScoreAndItsRules();
+
+                                DebugInput("WAAAAAAAAAAH!!!" + inputField.text);
+                                //mainScriptObj.CheckForErrors();
+
+                                //check the type of the error
+                                //if it is 1 error in recognizing happened, ID: errorInRecognizing
+                                //if it is 2 error in recall was made, ID: errorInRecalling 
+
+                                string error_information= mainScriptObj.playerMetricsObject.IdentifyAndStoreErrorForThisActivity
+                                    (ongoing_learning_activity_name, "errorInRecalling");
+                                Debug.LogError(error_information);
+                                mainScriptObj.rulesObject.CheckRulesForErrors(ongoing_learning_activity_name, ref would_be_hint);
+                                Debug.Log(would_be_hint);
+                                
+                                //ErrorMetrics temp_error_for_first;
+
+                                /*if (corectAnswerOrTypeOfError == 1)
+                                {
+
+                                    temp_activity_container.EncouteredErrorsList
+                                        .TryGetValue(temp_activity_container.errorRecognizeName, out temp_error_for_first);
+                                    temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+
+                                    string errorInfo = "ErrorInRecognizing timestamps: " +
+                                        temp_error_for_first.error_time_stamps.Count + "#  ";
+                                    for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
+                                    {
+                                        errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
+                                    }
+                                    Debug.LogError(errorInfo);
+
+
+                                    mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                                    hint.text = would_be_hint;
+                                    //string errorinfo = errore + " | " + temp_container.getnumberoferrors() + " timestamps: ";
+                                    //for (int i = 0; i < temp_container.getnumberoferrors(); i++)
+                                    //{
+                                    //    errorinfo += temp_container.error_time_stamps.elementat(i) + "  ";
+                                    //}
+                                    //debug.logerror(errorinfo);
+                                }*/
+                                //if (corectAnswerOrTypeOfError == 2)
+                                //////{
+                                //////    temp_activity_container.EncouteredErrorsList
+                                //////        .TryGetValue(temp_activity_container.errorRecallName, out temp_error_for_first);
+                                //////    temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+
+                                //////    string errorInfo = "ErrorInRecalling timestamps: "
+                                //////        + temp_error_for_first.error_time_stamps.Count + "#  ";
+                                //////    for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
+                                //////    {
+                                //////        errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
+                                //////    }
+                                //////    Debug.LogError(errorInfo);
+
+                                //////    mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                                //////    hint.text = would_be_hint;
+                                //////}
+                                /*else if (corectAnswerOrTypeOfError == 3)
+                                {
+                                    temp_activity_container.EncouteredErrorsList
+                                        .TryGetValue(temp_activity_container.errorImplementName, out temp_error_for_first);
+                                    temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+
+                                    string errorInfo = "errorInImplementing timestamps: "
+                                        + temp_error_for_first.error_time_stamps.Count + "#  ";
+                                    for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
+                                    {
+                                        errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
+                                    }
+                                    Debug.LogError(errorInfo);
+
+                                    mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                                    hint.text = would_be_hint;
+                                }*/
+
+                                //inputField.text = "";
+                            }
+
+                            //get a new question
+                            if (QManagObj.NewQuestionForTheFirstActivity(ref the_question, ref Dropdown_Menu,
+                                mainScriptObj.the_score))
                             {
-                                temp_activity_container.EncouteredErrorsList
-                                    .TryGetValue(temp_activity_container.errorRecallName, out temp_error_for_first);
-                                temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+                                //reset the question var to empty
+                                //the_question = "";
 
-                                string errorInfo = "ErrorInRecalling timestamps: "
-                                    + temp_error_for_first.error_time_stamps.Count + "#  ";
-                                for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
-                                {
-                                    errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
+                                //wait a bit and start the new activity
+
+                                /*Dropdown_Menu.options.Clear();
+                                Dropdown_Menu.value = 0;*/
+
+
+                                //move the dropdown to a place where it cannot be seen 
+                                Vector3 temp = new Vector3(1000.0f, 0, 0);
+                                Dropdown_Menu.transform.position += temp;
+
+                                //move the first input field to a place where it cannot be seen 
+                                //Vector3 temp = new Vector3(1000.0f, 0, 0);
+                                inputField.transform.position += temp;
+
+                                the_question = "";
+                                the_question = "New activity will start soon! Please wait...\n\n\n\n\n";
+
+                                if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(quiz_activity_name,
+                                   out temp_activity_container) &&
+                                   temp_activity_container.activity_completed == false)//if the first activity is not finished
+                                {//but the requirements are met
+
+
+                                    CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the first activity
+                                    temp_activity_container = null;//and empty the container
                                 }
-                                Debug.LogError(errorInfo);
 
-                                mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
-                                hint.text = would_be_hint;
+                                //deactivate the process of getting input during the "transfer"
+                                //from one activity to the other
+                                inputField.DeactivateInputField();
+                                inputField.interactable = false;
+
+                                //wait a bit
+                                StartCoroutine(WaitFunction());
                             }
-                            else if (corectAnswerOrTypeOfError == 3)
-                            {
-                                temp_activity_container.EncouteredErrorsList
-                                    .TryGetValue(temp_activity_container.errorImplementName, out temp_error_for_first);
-                                temp_error_for_first.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
-
-                                string errorInfo = "errorInImplementing timestamps: "
-                                    + temp_error_for_first.error_time_stamps.Count + "#  ";
-                                for (int i = 0; i < temp_error_for_first.error_time_stamps.Count; i++)
-                                {
-                                    errorInfo += temp_error_for_first.error_time_stamps[i] + "  ";
-                                }
-                                Debug.LogError(errorInfo);
-
-                                mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
-                                hint.text = would_be_hint;
-                            }
-
-                            inputField.text = "";
-                        }
-
-                        //get a new question
-                        if (QManagObj.NewQuestionForTheFirstActivity(ref the_question, ref Dropdown_Menu))
-                        {
-                            //reset the question var to empty
-                            //the_question = "";
-
-                            //wait a bit and start the new activity
-
-                            //move the first input field to a place where it cannot be seen 
-                            Vector3 temp = new Vector3(1000.0f, 0, 0);
-                            inputField.transform.position += temp;
-
-                            the_question = "";
-                            the_question = "New activity will start soon! Please wait...\n\n\n\n\n";
-
-                            if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(quiz_activity_name,
-                               out temp_activity_container) &&
-                               temp_activity_container.activity_completed == false)//if the first activity is not finished
-                            {//but the requirements are met
-
-
-                                CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the first activity
-                                temp_activity_container = null;//and empty the container
-                            }
-
-                            //deactivate the process of getting input during the "transfer"
-                            //from one activity to the other
-                            inputField.DeactivateInputField();
-                            inputField.interactable = false;
-
-                            //wait a bit
-                            StartCoroutine(WaitFunction());
                         }
 
                     });
@@ -533,7 +565,7 @@ namespace Prototype1v1
                 inputField2.ActivateInputField();
                 inputField2.interactable = true;
 
-                QManagObj.NewQuestionForTheSecondActivity(ref the_question);
+                QManagObj.NewQuestionForTheSecondActivity(ref the_question, mainScriptObj.the_score);
 
                 inputField2.onEndEdit.AddListener(delegate
                 {
@@ -574,20 +606,26 @@ namespace Prototype1v1
 
                             //check the type of the error
 
-                            ErrorMetrics temp_error_for_second;
-                            temp_activity_container.EncouteredErrorsList.TryGetValue(
-                                temp_activity_container.errorClassifyName, out temp_error_for_second);
-                            temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+                            ////ErrorMetrics temp_error_for_second;
+                            ////temp_activity_container.EncouteredErrorsList.TryGetValue(
+                            ////    temp_activity_container.errorClassifyName, out temp_error_for_second);
+                            ////temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
-                            string errorInfo = "errorInClassifying timestamps: " +
-                                temp_error_for_second.error_time_stamps.Count + "#  ";
-                            for (int i = 0; i < temp_error_for_second.error_time_stamps.Count; i++)
-                            {
-                                errorInfo += temp_error_for_second.error_time_stamps[i] + "  ";
-                            }
-                            Debug.LogError(errorInfo);
+                            ////string errorInfo = "errorInClassifying timestamps: " +
+                            ////    temp_error_for_second.error_time_stamps.Count + "#  ";
+                            ////for (int i = 0; i < temp_error_for_second.error_time_stamps.Count; i++)
+                            ////{
+                            ////    errorInfo += temp_error_for_second.error_time_stamps[i] + "  ";
+                            ////}
+                            ////Debug.LogError(errorInfo);
 
-                            mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                            string error_information= mainScriptObj.playerMetricsObject.IdentifyAndStoreErrorForThisActivity
+                                (ongoing_learning_activity_name, "errorInClassifying");
+                            Debug.LogError(would_be_hint);
+                            mainScriptObj.rulesObject.CheckRulesForErrors(ongoing_learning_activity_name, ref would_be_hint);
+                            Debug.LogError(would_be_hint);
+
+                            //mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
                             hint.text = would_be_hint;
 
                             inputField2.text = "";
@@ -607,27 +645,33 @@ namespace Prototype1v1
 
                             //check the type of the error
 
-                            ErrorMetrics temp_error_for_second;
-                            temp_activity_container.EncouteredErrorsList.TryGetValue(
-                                temp_activity_container.errorImplementName, out temp_error_for_second);
-                            temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
+                            ////ErrorMetrics temp_error_for_second;
+                            ////temp_activity_container.EncouteredErrorsList.TryGetValue(
+                            ////    temp_activity_container.errorImplementName, out temp_error_for_second);
+                            ////temp_error_for_second.ErrorMade(temp_activity_container.time_on_activity.Elapsed);
 
-                            string errorInfo = "errorInImplementing timestamps: " +
-                                temp_error_for_second.error_time_stamps.Count + "#  ";
-                            for (int i = 0; i < temp_error_for_second.error_time_stamps.Count; i++)
-                            {
-                                errorInfo += temp_error_for_second.error_time_stamps[i] + "  ";
-                            }
-                            Debug.LogError(errorInfo);
+                            ////string errorInfo = "errorInImplementing timestamps: " +
+                            ////    temp_error_for_second.error_time_stamps.Count + "#  ";
+                            ////for (int i = 0; i < temp_error_for_second.error_time_stamps.Count; i++)
+                            ////{
+                            ////    errorInfo += temp_error_for_second.error_time_stamps[i] + "  ";
+                            ////}
+                            ////Debug.LogError(errorInfo);
 
-                            mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
+                            string error_information = mainScriptObj.playerMetricsObject.IdentifyAndStoreErrorForThisActivity
+                                (ongoing_learning_activity_name, "errorInClassifying");
+                            Debug.LogError(would_be_hint);
+                            mainScriptObj.rulesObject.CheckRulesForErrors(ongoing_learning_activity_name, ref would_be_hint);
+                            Debug.LogError(would_be_hint);
+
+                            //mainScriptObj.rulesObject.CheckRulesForErrors(ref temp_activity_container, ref would_be_hint);
                             hint.text = would_be_hint;
 
                             inputField2.text = "";
                         }
                     }
                     //get a new question
-                    if (QManagObj.NewQuestionForTheSecondActivity(ref the_question))
+                    if (QManagObj.NewQuestionForTheSecondActivity(ref the_question, mainScriptObj.the_score))
                     {
                         
                         if (mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(classification_activity_name,
@@ -851,6 +895,92 @@ namespace Prototype1v1
 				}
                 
             }
+        }
+
+        //this learning text is based on information which was extracted from various Wikipedia pages 
+        void SetTheLearningText()
+        {
+            scrollbar1.value = 1f;
+
+            learningText.text = "\n\n\nHello! With this little game we want to help you learn more about the geography" +
+            " of the \"old continent\" - Europe and its countries. You might ask yourself - how is this useful?" +
+            " Well, imagine you are going on a trip through Europe and you want to visit some/most of the countries " +
+            " on the continent. Or maybe just one country. Now, in order to prepare you for the journey we made a collection" +
+            " of interesting and important information, that you might need, when interacting with the locals. Then you can" +
+            " show off your knowledge and stand tall above your average tourist! :) "
+            + "First of let us start with some numbers. There are aproximatelly 50 countries in Europe, while 28 of them are "+
+            "part of the European Union. "+
+            //+ "\n\nThe first part will cover " +
+            "The following is a list of some countries in Europe along with each of their capital city." +
+            "Be sure to read and remember which capital goes with which country, if you did not know already. :) \n" +
+
+                            "\nCountry - Capital\n" +
+
+                            "\nAlbania - Tirana" +
+                            "\nAndorra - Andorra la Vella" +
+                            "\nArmenia - Yerevan" +
+                            "\nAustria - Vienna" +
+                            "\nAzerbaijan - Baku" +
+                            "\nBelarus - Minsk" +
+                            "\nBelgium - Brussels" +
+                            "\nBosnia and Herzegovina - Sarajevo" +
+                            "\nBulgaria - Sofia" +
+                            "\nCroatia - Zagreb" +
+                            "\nCyprus - Nicosia" +
+                            "\nCzech Republic - Prague" +
+                            "\nDenmark - Copenhagen" +
+                            "\nEstonia - Tallinn" +
+                            "\nFinland - Helsinki" +
+                            "\nFrance - Paris" +
+                            "\nGeorgia - Tbilisi" +
+                            "\nGermany - Berlin" +
+                            "\nGreece - Athens" +
+                            "\nHungary - Budapest" +
+                            "\nIceland - Reykjavik" +
+                            "\nIreland - Dublin" +
+                            "\nItaly - Rome" +
+                            "\nKazakhstan - Astana" +
+                            "\nLatvia - Riga" +
+                            "\nLiechtenstein - Vaduz" +
+                            "\nLithuania - Vilnius" +
+                            "\nLuxembourg - Luxembourg" +
+                            "\nMacedonia - Skopje" +
+                            "\nMalta - Valletta" +
+                            "\nMoldova - Kishinev" +
+                            "\nMonaco - Monaco" +
+                            "\nMontenegro - Podgorica" +
+                            "\nNetherlands - Amsterdam" +
+                            "\nNorway - Oslo" +
+                            "\nPoland - Warsaw" +
+                            "\nPortugal - Lisbon" +
+                            "\nRomania - Bucharest" +
+                            "\nRussia - Moscow" +
+                            "\nSan Marino - San Marino" +
+                            "\nSerbia - Belgrade" +
+                            "\nSlovakia - Bratislava" +
+                            "\nSlovenia - Ljubljana" +
+                            "\nSpain - Madrid" +
+                            "\nSweden - Stockholm" +
+                            "\nSwitzerland - Bern" +
+                            "\nTurkey - Ankara" +
+                            "\nUkraine - Kiev" +
+                            "\nUnited Kingdom - London\n\n"
+
+                      
+             + "\n\nAn interesting fact to note about the continent itself is that some consider it"
+             +"to be one of the largest peninsulas on Earth."
+             +"Speaking of peninsulas, did you know that the four largest ones in Europe are (ordered from "
+             + "largest to smallest): Scandinavian, Balkan, Iberian, and Italian? The largest peninsula "
+             +"is shared by the following countries: Norway, Sweden, and Finland. The Balkan peninsula is comprised"
+             +" of: Albania, Bulgaria, Bosnia and Herzegovina, Croatia, Greece, Italy, Kosovo, Macedonia, "
+             +"Montenegro, Serbia, Slovenia, Romania, and Turkey. "
+             +"Note that there is a difference between the Balkan peninsula and the Balkans, where the latter"
+             +" is a political region which does not include all of the previously mentioned countries."
+             +" The Iberian peninsula, on the other hand is shared among three countries: : Spain, Portugal, and Andorra. "
+             + "And last, but not least, the Italian Peninsula (also known as Apennine Peninsula) covers: Italy, The Vatican,"
+            +"and San Marino. There are many more peninsulas on the continent but this game will only focus on the four major ones."
+
+                            + "\n\nThe second part will cover ";
         }
 
 

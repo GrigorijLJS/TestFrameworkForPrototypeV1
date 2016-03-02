@@ -260,8 +260,12 @@ namespace Prototype1v1
 		
 		
 
-        public void CheckRulesForErrors(ref ActivityMetrics activity_container, ref string would_be_hint)
+        public void CheckRulesForErrors(/*ref ActivityMetrics*/ string activity_ID, ref string would_be_hint)
 		{
+            ActivityMetrics activity_container = null;
+
+            playerMetricsObject.gameActivitiesList.TryGetValue(activity_ID, out activity_container);
+
 			//check the rules for the errors and their limits 
             foreach (var error in activity_container.EncouteredErrorsList)
 			{

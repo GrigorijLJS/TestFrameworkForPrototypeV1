@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Linq;
 
 
+
 namespace Prototype1v1
 {
 	public class MainScript : MonoBehaviour
@@ -55,6 +56,7 @@ namespace Prototype1v1
 			//playerMetricsObject.activityMetricsObject = taskObj;
 			
 			rulesObject.playerMetricsObject = playerMetricsObject;
+            //playerMetricsObject.rulesObject = rulesObject;
 
 			the_score=0;
 
