@@ -897,7 +897,8 @@ namespace Prototype1v1
             }
         }
 
-        //this learning text is based on information which was extracted from various Wikipedia pages 
+        //this learning text is based on information which was extracted from various Wikipedia pages and  
+        //EuroVoc (the EU's multilingual thesaurus)
         void SetTheLearningText()
         {
             scrollbar1.value = 1f;
@@ -908,9 +909,9 @@ namespace Prototype1v1
             " on the continent. Or maybe just one country. Now, in order to prepare you for the journey we made a collection" +
             " of interesting and important information, that you might need, when interacting with the locals. Then you can" +
             " show off your knowledge and stand tall above your average tourist! :) "
-            + "First of let us start with some numbers. There are aproximatelly 50 countries in Europe, while 28 of them are "+
-            "part of the European Union. "+
-            //+ "\n\nThe first part will cover " +
+            + "First of let us start with some numbers. There are aproximatelly 50 countries in Europe, while 28 of them are " +
+            "part of the European Union. " +
+                //+ "\n\nThe first part will cover " +
             "The following is a list of some countries in Europe along with each of their capital city." +
             "Be sure to read and remember which capital goes with which country, if you did not know already. :) \n" +
 
@@ -966,21 +967,35 @@ namespace Prototype1v1
                             "\nUkraine - Kiev" +
                             "\nUnited Kingdom - London\n\n"
 
-                      
-             + "\n\nAn interesting fact to note about the continent itself is that some consider it"
-             +"to be one of the largest peninsulas on Earth."
-             +"Speaking of peninsulas, did you know that the four largest ones in Europe are (ordered from "
-             + "largest to smallest): Scandinavian, Balkan, Iberian, and Italian? The largest peninsula "
-             +"is shared by the following countries: Norway, Sweden, and Finland. The Balkan peninsula is comprised"
-             +" of: Albania, Bulgaria, Bosnia and Herzegovina, Croatia, Greece, Italy, Kosovo, Macedonia, "
-             +"Montenegro, Serbia, Slovenia, Romania, and Turkey. "
-             +"Note that there is a difference between the Balkan peninsula and the Balkans, where the latter"
-             +" is a political region which does not include all of the previously mentioned countries."
-             +" The Iberian peninsula, on the other hand is shared among three countries: : Spain, Portugal, and Andorra. "
-             + "And last, but not least, the Italian Peninsula (also known as Apennine Peninsula) covers: Italy, The Vatican,"
-            +"and San Marino. There are many more peninsulas on the continent but this game will only focus on the four major ones."
 
-                            + "\n\nThe second part will cover ";
+            + "\n\nAn interesting fact to note about the continent itself is that some consider it"
+            + "to be one of the largest peninsulas on Earth."
+            + "Speaking of peninsulas, did you know that the four largest ones in Europe(ordered from "
+            + "largest to smallest) are : Scandinavian, Balkan, Iberian, and Italian? The largest peninsula "
+            + "is shared by the following countries: Norway, Sweden, and Finland. The Balkan peninsula is comprised"
+            + " of: Albania, Bulgaria, Bosnia and Herzegovina, Croatia, Greece, Italy, Kosovo, Macedonia, "
+            + "Montenegro, Serbia, Slovenia, Romania, and Turkey. "
+            + "Note that there is a difference between the Balkan peninsula and the Balkans, where the latter"
+            + " is a political region which does not include all of the previously mentioned countries."
+            + " The Iberian peninsula, on the other hand is shared among three countries: Spain, Portugal, and Andorra. "
+            + "And last, but not least, the Italian Peninsula (also known as Apennine Peninsula) covers: Italy, the Vatican,"
+            + "and San Marino. There are many more peninsulas on the continent but this game will only focus on the "
+            + "four major ones that you just read about. "
+
+            + "\n\nNow let us discuss about how the countries in Europe are grouped into various (geographical) regions. "
+            + "There are many ways of dividing the continent into regions, but this game will focus on the following ones: "
+            +"Northern Europe, Western Europe, Eastern Europe, and Southern Europe. Now we will take a look at some rough"
+            + "borders for each of them. The borders are made up of countries that do not belong but are borders of the regions."
+            +" The region of Northern Europe"
+            +" is comprised of the countries that lay north of the following countries: United Kingdom, the Netherlands, "
+            + "Germany, Poland; and to the north-west of the line made from the borders of Russia and Belarus."
+            + " Eastern Europe lies to the east of the line made by the borders of Germany, Austria, and Italy; to the north "
+            + "of Greece and Turkey; and to the south/south-east of the borders of Finland, Estonia, Latvia, and Lithuania. "
+            + "The countries of Southern Europe lay to the south of the borders of France, Switzerland, Albania, Macedonia,"
+            +"and Bulgaria. Western European countries are to the north of Spain and Italy; to the west of Poland, Czech Republic"
+            +", Slovakia, and Hungary; and to the south of Denmark and Iceland"
+
+            + "\n\n";
         }
 
 

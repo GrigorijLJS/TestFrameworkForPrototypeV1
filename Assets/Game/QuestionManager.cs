@@ -241,7 +241,7 @@ public class QuestionManager : MonoBehaviour {
         {
             foreach(string play_answ in player_answers)
             {
-                if(play_answ==corr_answer)
+                if (play_answ.Equals(corr_answer))
                 {
                     number_of_correct_items++;
                 }
