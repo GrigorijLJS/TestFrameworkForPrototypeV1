@@ -248,7 +248,7 @@ namespace Prototype1v1
                                 DebugInput(Dropdown_Menu.options[Dropdown_Menu.value].text);
                                 /*DebugInput(inputField.text);
                                 inputField.text = "";*/
-                                the_question += "Correct!";
+                                //the_question += "Correct!";
                             }
                             else
                             {//incorrect answer
@@ -630,7 +630,7 @@ namespace Prototype1v1
 
                             inputField2.text = "";
                         }
-                        else if(corectAnswerOrTypeOfError == 2)
+                        /*else if(corectAnswerOrTypeOfError == 2)
                         {
                             //the player loses some points
                             mainScriptObj.the_score -= new_points;
@@ -668,7 +668,7 @@ namespace Prototype1v1
                             hint.text = would_be_hint;
 
                             inputField2.text = "";
-                        }
+                        }*/
                     }
                     //get a new question
                     if (QManagObj.NewQuestionForTheSecondActivity(ref the_question, mainScriptObj.the_score))

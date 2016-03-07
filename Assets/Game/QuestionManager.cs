@@ -19,7 +19,7 @@ public class QuestionManager : MonoBehaviour {
     private int question_index;
     private int question_index_for_second;
 
-    private string correct_from_previous;
+    private string correct_answer_from_previous_question;
 
 
 	public QuestionManager()
@@ -29,7 +29,7 @@ public class QuestionManager : MonoBehaviour {
         questionDataForFirstActivity = null;
         questionDataForSecondActivity = null;
 
-        correct_from_previous = "";
+        correct_answer_from_previous_question = "";
 		//questionDataForFirstActivity = QuestionData.LoadFromText(Application.dataPath+"/Game/questionDataXMLFile.xml");
 		//questionDataForFirstActivity = QuestionData.LoadFromText(questionDataXMLFile.xml);
 	}
@@ -60,7 +60,7 @@ public class QuestionManager : MonoBehaviour {
 
             // add code here to set text values of your Question GameObject
             // e.g. GetComponent<SomeScript>().Text = currentQuestion.questionText;
-            the_question = correct_from_previous+"Question: " + 
+            the_question = correct_answer_from_previous_question+"Question: " + 
                 currentQuestion.questionText + "\n\nquestion # " + (question_index+1)+" out of "
                 + questionDataForFirstActivity.questions.Count + "\n\ncurrent score: " + the_score+"\n\n";
             /* +" \n\nChoices: " + currentQuestion.answer1 +
@@ -125,7 +125,8 @@ public class QuestionManager : MonoBehaviour {
             //get a question
             currentQuestion = questionDataForSecondActivity.questions[question_index_for_second];
 
-            the_question = "Question: " + currentQuestion.questionText + " \n\nChoices: " + currentQuestion.answer1 +
+            the_question =correct_answer_from_previous_question+ "\nQuestion: " + currentQuestion.questionText + 
+                " \n\nChoices: " + currentQuestion.answer1 +
                 "     " + currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5
                 + "     " + currentQuestion.answer6 + "     " + currentQuestion.answer7 + "     " + currentQuestion.answer8
@@ -158,21 +159,28 @@ public class QuestionManager : MonoBehaviour {
 
 	public int CheckCorrectnessOfAnswer(string selectedAnswer, ref int new_points) 
 	{
-		//save the question's points and use them later to add/subtract points from the game score
-		new_points=currentQuestion.questionScore;
 
         /*//a shortcut in case the selectedAnser is empty - which is an error in implementing
         if (selectedAnswer == "" || selectedAnswer == null)
             return 3;*/
 
 		if(selectedAnswer.Equals(currentQuestion.correctAnswer, StringComparison.OrdinalIgnoreCase))
-		{//correct answer, i.e. the strings are equal
-            correct_from_previous = "Correct answer! Here is another question:\n";
+        {//correct answer, i.e. the strings are equal
+
+            //save the question's points and use them later to add points from the game score
+            new_points = currentQuestion.questionScore;
+
+            correct_answer_from_previous_question = "Correct answer! You gained "+currentQuestion.questionScore
+                +" points! Here is another question:\n";
 			return 0;
 		}
 		else
         {
-            correct_from_previous = "Wrong answer! The correct answer was "+currentQuestion.correctAnswer+"\n";
+            //save half of the question's points and use them later to subtract points from the game score
+            new_points = currentQuestion.questionScore/2;
+
+            correct_answer_from_previous_question = "Wrong answer! The correct answer was: "+currentQuestion.correctAnswer+
+                ".You lost "+(currentQuestion.questionScore/2) +" points! \n";
             return 2;
 
 			/*//error in recognizing happens if the two strings partly match???
@@ -225,12 +233,10 @@ public class QuestionManager : MonoBehaviour {
 
     public int CheckCorrectnessOfAnswerForSecond(string selectedAnswer, ref int new_points)
     {
-        //save the question's points and use them later to add/subtract points from the game score
-        new_points = currentQuestion.questionScore;
 
-        //a shortcut in case the selectedAnser is empty - which is an error in implementing
+        /*//a shortcut in case the selectedAnser is empty - which is an error in implementing
         if (selectedAnswer == "" || selectedAnswer == null)
-            return 2;
+            return 2;*/
 
         //split the strings into separate words
         string[] player_answers = selectedAnswer.Split(' ');
@@ -241,7 +247,7 @@ public class QuestionManager : MonoBehaviour {
         {
             foreach(string play_answ in player_answers)
             {
-                if (play_answ.Equals(corr_answer))
+                if (play_answ.Equals(corr_answer, StringComparison.OrdinalIgnoreCase))
                 {
                     number_of_correct_items++;
                 }
@@ -250,16 +256,27 @@ public class QuestionManager : MonoBehaviour {
 
         if (number_of_correct_items==correct_answers.Length && player_answers.Length==correct_answers.Length)
         {//correct answer, i.e. the strings player_answers and correct_answers contain the same items
+
+            //save the question's points and use them later to add points from the game score
+            new_points = currentQuestion.questionScore;
+
+            correct_answer_from_previous_question = "Correct answer! You gained " + currentQuestion.questionScore
+                + " points! Here is another question:\n";
             return 0;
         }
         else
         {//incorrect answer and an error in classification 
 
+            //save half of the question's points and use them later to subtract points from the game score
+            new_points = currentQuestion.questionScore / 2;
+
+            correct_answer_from_previous_question = "Wrong answer! The correct answer was: " + currentQuestion.correctAnswer +
+                ".You lost " + (currentQuestion.questionScore / 2) + " points! \n";
             return 1;
         }
     }
 
-
+    //!!!!!!!CURRENTLY NOT USED ANYMORE
     //based on the solution from: http://stackoverflow.com/questions/6944056/c-sharp-compare-string-similarity
     //from the comments: "The Damereau-Levenshein Distance algorithm calculates the number of letter additions,
     //subtractions, substitutions, and transpositions (swaps) necessary to convert one string to another. The 
