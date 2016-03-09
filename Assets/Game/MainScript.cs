@@ -129,8 +129,8 @@ namespace Prototype1v1
 		{
 			
 			//adding limits to the game score
+			playerMetricsObject.StoreInputThresholdsToGameScore(5);
 			playerMetricsObject.StoreInputThresholdsToGameScore(10);
-			playerMetricsObject.StoreInputThresholdsToGameScore(20);
 			//playerMetricsObject.StoreInputThresholdsToGameScore(30);
 		}
 		

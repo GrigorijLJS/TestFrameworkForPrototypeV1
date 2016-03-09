@@ -125,8 +125,8 @@ namespace Prototype1v1
 
                 temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorRecallName
                     , out temp_err_cont);
-                temp_err_cont.StoreInputThresholdsToNumberOfErrors(2);
-                temp_err_cont.StoreInputThresholdsToNumberOfErrors(4);
+                temp_err_cont.StoreInputThresholdsToNumberOfErrors(3);
+                temp_err_cont.StoreInputThresholdsToNumberOfErrors(7);
                 temp_err_cont = null;
 
                 /*temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorImplementName
@@ -153,7 +153,7 @@ namespace Prototype1v1
                 ErrorMetrics temp_error_cont;
                 temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorClassifyName
                     , out temp_error_cont);
-                temp_error_cont.StoreInputThresholdsToNumberOfErrors(4);
+                temp_error_cont.StoreInputThresholdsToNumberOfErrors(5);
                 temp_error_cont = null;
 
                 temp_activity_container.EncouteredErrorsList.TryGetValue(temp_activity_container.errorImplementName
@@ -267,7 +267,7 @@ namespace Prototype1v1
                                 //if it is 1 error in recognizing happened, ID: errorInRecognizing
                                 //if it is 2 error in recall was made, ID: errorInRecalling 
 
-                                string error_information= mainScriptObj.playerMetricsObject.IdentifyAndStoreErrorForThisActivity
+                                string error_information= mainScriptObj.playerMetricsObject.TrackAndStoreErrorForThisActivity
                                     (ongoing_learning_activity_name, "errorInRecalling");
                                 Debug.LogError(error_information);
                                 mainScriptObj.rulesObject.CheckRulesForErrors(ongoing_learning_activity_name, ref would_be_hint);
@@ -342,6 +342,8 @@ namespace Prototype1v1
                             if (QManagObj.NewQuestionForTheFirstActivity(ref the_question, ref Dropdown_Menu,
                                 mainScriptObj.the_score))
                             {
+
+                                
                                 //reset the question var to empty
                                 //the_question = "";
 
@@ -540,13 +542,13 @@ namespace Prototype1v1
 
 
                 DebugInput("Chaos sighted!");
-                CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the first activity
+                //CheckForStartOfActivity(ref temp_activity_container, activity_timer_stop);//end the first activity
                 temp_activity_container = null;//empty the container
 
                 //and extract the second activity
                 mainScriptObj.playerMetricsObject.gameActivitiesList.TryGetValue(classification_activity_name,
                    out temp_activity_container);
-                temp_activity_container.StartStopOrPauseTimeOnActivityCounter(activity_timer_start);
+                //temp_activity_container.StartStopOrPauseTimeOnActivityCounter(activity_timer_start);
 
                 CheckForStartOfActivity(ref temp_activity_container, activity_timer_start);
                 //temp_learning_activity_container=null;
@@ -619,7 +621,7 @@ namespace Prototype1v1
                             ////}
                             ////Debug.LogError(errorInfo);
 
-                            string error_information= mainScriptObj.playerMetricsObject.IdentifyAndStoreErrorForThisActivity
+                            string error_information= mainScriptObj.playerMetricsObject.TrackAndStoreErrorForThisActivity
                                 (ongoing_learning_activity_name, "errorInClassifying");
                             Debug.LogError(would_be_hint);
                             mainScriptObj.rulesObject.CheckRulesForErrors(ongoing_learning_activity_name, ref would_be_hint);
@@ -658,7 +660,7 @@ namespace Prototype1v1
                             ////}
                             ////Debug.LogError(errorInfo);
 
-                            string error_information = mainScriptObj.playerMetricsObject.IdentifyAndStoreErrorForThisActivity
+                            string error_information = mainScriptObj.playerMetricsObject.TrackAndStoreErrorForThisActivity
                                 (ongoing_learning_activity_name, "errorInClassifying");
                             Debug.LogError(would_be_hint);
                             mainScriptObj.rulesObject.CheckRulesForErrors(ongoing_learning_activity_name, ref would_be_hint);
@@ -689,9 +691,31 @@ namespace Prototype1v1
                             //stop the counting of time in-game
                             mainScriptObj.playerMetricsObject.timeMetricsObject.StartAndStopTimeCounterSinceBeginningOfGame(false);
 
-                            //give final output
+                            //give the final output to the player
                             the_question = " ---   GAME OVER! THANK YOU FOR PLAYING!   --- " +
-                                "\n\n\nYour score is: " + mainScriptObj.the_score+"\n\n\n\n";
+                                "\n\n\nYour score is: " + mainScriptObj.the_score+". ";
+                            if (mainScriptObj.the_score>=150)
+                            {
+                                the_question += "PERFECT!!!";
+                            }
+                            else if (mainScriptObj.the_score >= 140 && mainScriptObj.the_score<150)
+                            {
+                                the_question += "Almost perfect!";
+                            }
+                            else if (mainScriptObj.the_score>=100 && mainScriptObj.the_score<140)
+                            {
+                                the_question += "Good.";
+                            }
+                            else if (mainScriptObj.the_score >= 50 && mainScriptObj.the_score < 100)
+                            {
+                                the_question += "Not bad.";
+                            }
+                            else if (mainScriptObj.the_score < 50)
+                            {
+                                the_question += "You really need to work on your knowledge about the geography of Europe.";
+                            }
+
+                            the_question += "\n\n\n\n";
 
                             mainScriptObj.logObj.WriteLog();
                         }

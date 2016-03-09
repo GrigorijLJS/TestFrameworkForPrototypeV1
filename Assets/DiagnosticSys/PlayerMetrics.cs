@@ -269,7 +269,7 @@ namespace Prototype1v1
         }
 
 
-        public string IdentifyAndStoreErrorForThisActivity(string current_activity_ID, string error_ID)
+        public string TrackAndStoreErrorForThisActivity(string current_activity_ID, string error_ID)
         {
             ActivityMetrics current_activity = null;
             ErrorMetrics temp_error_for_first=null;

@@ -60,9 +60,9 @@ public class QuestionManager : MonoBehaviour {
 
             // add code here to set text values of your Question GameObject
             // e.g. GetComponent<SomeScript>().Text = currentQuestion.questionText;
-            the_question = correct_answer_from_previous_question+"Question: " + 
-                currentQuestion.questionText + "\n\nquestion # " + (question_index+1)+" out of "
-                + questionDataForFirstActivity.questions.Count + "\n\ncurrent score: " + the_score+"\n\n";
+            the_question = correct_answer_from_previous_question+"\nQuestion: " + 
+                currentQuestion.questionText + "\n\nYou are on question " + (question_index+1)+" out of "
+                + questionDataForFirstActivity.questions.Count + " and your score is " + the_score+".\n\n";
             /* +" \n\nChoices: " + currentQuestion.answer1 +
                 "     "+currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5 
@@ -126,12 +126,14 @@ public class QuestionManager : MonoBehaviour {
             currentQuestion = questionDataForSecondActivity.questions[question_index_for_second];
 
             the_question =correct_answer_from_previous_question+ "\nQuestion: " + currentQuestion.questionText + 
-                " \n\nChoices: " + currentQuestion.answer1 +
+                " \n\nPossible answers: " + currentQuestion.answer1 +
                 "     " + currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5
                 + "     " + currentQuestion.answer6 + "     " + currentQuestion.answer7 + "     " + currentQuestion.answer8
-                + "     " + currentQuestion.answer9 + "     " + currentQuestion.answer10 + "\n\n" + ": "
-                + currentQuestion.correctAnswer + "\n" + "\ncurrent score:" + the_score + "\n";
+                + "     " + currentQuestion.answer9 + "     " + currentQuestion.answer10 + "        :-> "
+                + currentQuestion.correctAnswer + "\n\nYou are on question " + (question_index_for_second + 1) + " out of "
+                +questionDataForSecondActivity.questions.Count+ " and your score is " + the_score + ".\n\n";
+
         }
 
         if ((question_index_for_second + 1) <= questionDataForSecondActivity.questions.Count)
@@ -177,10 +179,10 @@ public class QuestionManager : MonoBehaviour {
 		else
         {
             //save half of the question's points and use them later to subtract points from the game score
-            new_points = currentQuestion.questionScore/2;
+            new_points = currentQuestion.questionScore;
 
             correct_answer_from_previous_question = "Wrong answer! The correct answer was: "+currentQuestion.correctAnswer+
-                ".You lost "+(currentQuestion.questionScore/2) +" points! \n";
+                ". You lost "+currentQuestion.questionScore +" points! \n";
             return 2;
 
 			/*//error in recognizing happens if the two strings partly match???
@@ -268,10 +270,10 @@ public class QuestionManager : MonoBehaviour {
         {//incorrect answer and an error in classification 
 
             //save half of the question's points and use them later to subtract points from the game score
-            new_points = currentQuestion.questionScore / 2;
+            new_points = currentQuestion.questionScore;
 
             correct_answer_from_previous_question = "Wrong answer! The correct answer was: " + currentQuestion.correctAnswer +
-                ".You lost " + (currentQuestion.questionScore / 2) + " points! \n";
+                ". You lost " + currentQuestion.questionScore + " points! \n";
             return 1;
         }
     }

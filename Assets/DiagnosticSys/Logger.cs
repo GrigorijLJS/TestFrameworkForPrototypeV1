@@ -16,6 +16,7 @@ namespace Prototype1v1
         //a function used for writing all the data from the metrics to a .txt file when the game is finished
         public void WriteLog()
         {
+            //the path for the log file is hardcoded for now
             using (System.IO.StreamWriter output_file =
             new System.IO.StreamWriter(@"C:\Users\GSV\Desktop\diagnosticSystemLog.txt"))
             {
@@ -93,17 +94,17 @@ namespace Prototype1v1
                 output_file.WriteLine("--------game activities data end\n\n");
 
                 output_file.WriteLine("\n\n--------indicator data:");
-                temp_logger = "main indicators activated: ";
+                temp_logger = "main indicators activated: \n";
                 foreach (var main_indicator in rulesObj.indicatorsObject.mainIndicators)
                 {
-                    temp_logger += main_indicator.Key.ToString() + " occurred " + main_indicator.Value.ToString()+"  ";
+                    temp_logger += "--"+main_indicator.Key.ToString() + " occurred " + main_indicator.Value.ToString()+"\n";
                 }
                 output_file.WriteLine(temp_logger);
                 temp_logger = "";
-                temp_logger = "aux indicators activated: ";
+                temp_logger = "\n\naux indicators activated: \n";
                 foreach (var aux_indicator in rulesObj.indicatorsObject.auxiliaryIndicators)
                 {
-                    temp_logger += aux_indicator.Key.ToString() + " occurred " + aux_indicator.Value.ToString() + "  ";
+                    temp_logger += "--" + aux_indicator.Key.ToString() + " occurred " + aux_indicator.Value.ToString() + "\n";
                 }
                 output_file.WriteLine(temp_logger);
                 temp_logger = "";
