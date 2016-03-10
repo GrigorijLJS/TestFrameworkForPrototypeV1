@@ -929,15 +929,14 @@ namespace Prototype1v1
 
             learningText.text = "\n\n\nHello! With this little game we want to help you learn more about the geography" +
             " of the \"old continent\" - Europe and its countries. You might ask yourself - how is this useful?" +
-            " Well, imagine you are going on a trip through Europe and you want to visit some/most of the countries " +
-            " on the continent. Or maybe just one country. Now, in order to prepare you for the journey we made a collection" +
-            " of interesting and important information, that you might need, when interacting with the locals. Then you can" +
-            " show off your knowledge and stand tall above your average tourist! :) "
-            + "First of let us start with some numbers. There are aproximatelly 50 countries in Europe, while 28 of them are " +
-            "part of the European Union. " +
-                //+ "\n\nThe first part will cover " +
-            "The following is a list of some countries in Europe along with each of their capital city." +
-            "Be sure to read and remember which capital goes with which country, if you did not know already. :) \n" +
+            " Well, imagine you are going on a trip through Europe and you want to visit some/most, or even just one, of the countries " +
+            " on the continent. Now, in order to prepare you for the journey we made a collection" +
+            " of interesting and important information that you might need when interacting with the locals. Then you can" +
+            " show off your knowledge and rise above the average tourist." + 
+            "First of all, let us start with some numbers. There are aproximatelly 50 countries in Europe and exactly 28" +
+            " of them are part of the European Union. " +
+            "The following is a list of some countries in Europe along with their capitals." +
+            " Be sure to read and remember which capital goes with which country, in case you didn't know this already. \n" +
 
                             "\nCountry - Capital\n" +
 
@@ -992,32 +991,31 @@ namespace Prototype1v1
                             "\nUnited Kingdom - London\n\n"
 
 
-            + "\n\nAn interesting fact to note about the continent itself is that some consider it"
+            + "\n\nAn interesting fact to note about the continent itself is that some consider it "
             + "to be one of the largest peninsulas on Earth."
-            + "Speaking of peninsulas, did you know that the four largest ones in Europe(ordered from "
-            + "largest to smallest) are : Scandinavian, Balkan, Iberian, and Italian? The largest peninsula "
+            + " Speaking of peninsulas, did you know that the four largest ones in Europe(ordered from "
+            + "largest to smallest) are the Scandinavian, Balkan, Iberian, and Italian? The largest peninsula "
             + "is shared by the following countries: Norway, Sweden, and Finland. The Balkan peninsula is comprised"
             + " of: Albania, Bulgaria, Bosnia and Herzegovina, Croatia, Greece, Italy, Kosovo, Macedonia, "
             + "Montenegro, Serbia, Slovenia, Romania, and Turkey. "
-            + "Note that there is a difference between the Balkan peninsula and the Balkans, where the latter"
-            + " is a political region which does not include all of the previously mentioned countries."
-            + " The Iberian peninsula, on the other hand is shared among three countries: Spain, Portugal, and Andorra. "
-            + "And last, but not least, the Italian Peninsula (also known as Apennine Peninsula) covers: Italy, the Vatican,"
-            + "and San Marino. There are many more peninsulas on the continent but this game will only focus on the "
-            + "four major ones that you just read about. "
+            + "Note that there is a difference between the Balkan peninsula and the Balkans, the latter being"
+            + " a political region which does not include all of the previously mentioned countries. Confusing, right?"
+            + " The Iberian peninsula, on the other hand, is shared by three countries: Spain, Portugal, and Andorra. "
+            + "And last, but definitly not least, the Italian Peninsula (also known as Apennine Peninsula)"
+            + " covers: Italy, the Vatican, and San Marino. There are many more peninsulas on the continent "
+            + "but this game will only focus on the four major ones that you just read about. "
 
-            + "\n\nNow let us discuss about how the countries in Europe are grouped into various (geographical) regions. "
+            + "\n\nNow let us discuss one possible way in which the countries in Europe can be grouped. "
             + "There are many ways of dividing the continent into regions, but this game will focus on the following ones: "
-            +"Northern Europe, Western Europe, Eastern Europe, and Southern Europe. Now we will take a look at some rough"
-            + "borders for each of them. The borders are made up of countries that do not belong but are borders of the regions."
-            +" The region of Northern Europe"
+            +"Northern Europe, Western Europe, Eastern Europe, and Southern Europe. We will take a look at some imaginary "
+            + "borders for each of them and help you form a rough image of the regions. Northern Europe"
             +" is comprised of the countries that lay north of the following countries: United Kingdom, the Netherlands, "
             + "Germany, Poland; and to the north-west of the line made from the borders of Russia and Belarus."
             + " Eastern Europe lies to the east of the line made by the borders of Germany, Austria, and Italy; to the north "
             + "of Greece and Turkey; and to the south/south-east of the borders of Finland, Estonia, Latvia, and Lithuania. "
             + "The countries of Southern Europe lay to the south of the borders of France, Switzerland, Albania, Macedonia,"
             +"and Bulgaria. Western European countries are to the north of Spain and Italy; to the west of Poland, Czech Republic"
-            +", Slovakia, and Hungary; and to the south of Denmark and Iceland"
+            +", Slovakia, and Hungary; and to the south of Denmark and Iceland. "
 
             + "\n\n";
         }
