@@ -17,7 +17,8 @@ namespace Prototype1v1
 
         //public int time;
 		private Text timer;
-		private Text hint;
+        private Text hint;
+        private Text score_text;
 
         //private DiagnosticRules rulesObject = new DiagnosticRules();
 
@@ -26,7 +27,8 @@ namespace Prototype1v1
 
         public GameObject text_object;
 
-		public GameObject hintTextObj;
+        public GameObject hintTextObj;
+        public GameObject scoreTextObj;
 
 		public GameObject QuestionManager;
 
@@ -85,6 +87,7 @@ namespace Prototype1v1
 
             timer = text_object.GetComponent<Text>();
 			hint = hintTextObj.GetComponent<Text>();
+            score_text = scoreTextObj.GetComponent<Text>();
 
 
 			
