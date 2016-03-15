@@ -109,6 +109,9 @@ namespace Prototype1v1
                     if(main_indicator.Value==main_indicator_threshold)
                     {
                         indicatorsObject.StoreAuxiliaryIndicator(main_indicator.Key);
+
+                        //AND SEND A "HINT" FOR THE AUX. INDICATORS! ALSO FOR THE MAIN ONES???
+#warning add an indicator, well print it somewhere so it can be seen - like indicator_tralala
                     }
                 }
             }
@@ -161,8 +164,10 @@ namespace Prototype1v1
 
                         //attach the value that activated the indicator
                         score_increase_or_decrease_indicator_ID += ";"+playerMetricsObject.game_score_triggers.ElementAt(i);
-                        //and send the main indicator 
+                        //send the main indicator 
                         indicatorsObject.StoreMainIndicator(score_increase_or_decrease_indicator_ID);
+                        //and check if an auxiliary indicator should be activated
+                        CheckThresholdsForMainIndicators();
 					}
 
 				}
@@ -178,6 +183,8 @@ namespace Prototype1v1
                         score_increase_or_decrease_indicator_ID += ";"+playerMetricsObject.game_score_triggers.ElementAt(i);
                         //and send the main indicator 
                         indicatorsObject.StoreMainIndicator(score_increase_or_decrease_indicator_ID);
+                        //and check if an auxiliary indicator should be activated
+                        CheckThresholdsForMainIndicators();
 
 						
 					}
@@ -225,6 +232,8 @@ namespace Prototype1v1
 
                     //send the indicator and its index to be stored or have its occurence incremented (if it already exists)
                     indicatorsObject.StoreMainIndicator(time_on_activity_threshold_ID);
+                    //and check if an auxiliary indicator should be activated
+                    CheckThresholdsForMainIndicators();
 
                     temp_activity_container.current_task_time_limit_index++;
                 }
@@ -286,6 +295,9 @@ namespace Prototype1v1
 
                             //send the indicator (per error type)
                             indicatorsObject.StoreMainIndicator(error.Key.ToString() + "Threshold");
+
+                            //and check if an auxiliary indicator should be activated
+                            CheckThresholdsForMainIndicators();
 						}
 					}
 					i++;
