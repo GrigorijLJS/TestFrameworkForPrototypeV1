@@ -19,6 +19,7 @@ namespace Prototype1v1
 		private Text timer;
         private Text hint;
         private Text score_text;
+        private Text time_indicator_text;
 
         //private DiagnosticRules rulesObject = new DiagnosticRules();
 
@@ -29,6 +30,8 @@ namespace Prototype1v1
 
         public GameObject hintTextObj;
         public GameObject scoreTextObj;
+        public GameObject timeIndicatorTextObj;
+        string temp_time_indicator = "";
 
 		public GameObject QuestionManager;
 
@@ -88,6 +91,7 @@ namespace Prototype1v1
             timer = text_object.GetComponent<Text>();
 			hint = hintTextObj.GetComponent<Text>();
             score_text = scoreTextObj.GetComponent<Text>();
+            time_indicator_text = timeIndicatorTextObj.GetComponent<Text>();
 
 
 			
@@ -169,7 +173,8 @@ namespace Prototype1v1
 				temp_learning_activity_container.StoreInputLimitToNumberOfTriesToSolveThisTask(4);*/
 			}
 
-
+            timeIndicatorTextObj.transform.position += move_pos_offscreen;
+            scoreTextObj.transform.position += move_pos_offscreen;
             Dropdown_Menu.transform.position += move_pos_offscreen;
             inputField2.transform.position += move_pos_offscreen;
 
@@ -185,6 +190,10 @@ namespace Prototype1v1
             {
 
                 Dropdown_Menu.transform.position += move_pos_onscreen;
+                timeIndicatorTextObj.transform.position += move_pos_onscreen;
+                scoreTextObj.transform.position += move_pos_onscreen;
+
+                score_text.text = "";
 
                 //move the reading material and GUI elements that are not needed
                 start_button.transform.position += move_pos_offscreen;
@@ -246,7 +255,7 @@ namespace Prototype1v1
                                 //update the diagnostic system about the score changes
                                 mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
                                 //and check the rules for the score
-                                mainScriptObj.CheckTheGameScoreAndItsRules();
+                                mainScriptObj.CheckTheGameScoreAndItsRules(score_text);
 
                                 DebugInput(Dropdown_Menu.options[Dropdown_Menu.value].text);
                                 /*DebugInput(inputField.text);
@@ -261,7 +270,7 @@ namespace Prototype1v1
                                 //update the diagnostic system about the score changes
                                 mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
                                 //and check the rules for the score
-                                mainScriptObj.CheckTheGameScoreAndItsRules();
+                                mainScriptObj.CheckTheGameScoreAndItsRules(score_text);
 
                                 DebugInput("WAAAAAAAAAAH!!!" + inputField.text);
                                 //mainScriptObj.CheckForErrors();
@@ -589,7 +598,7 @@ namespace Prototype1v1
                         //update the diagnostic system about the score changes
                         mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
                         //and check the rules for the score
-                        mainScriptObj.CheckTheGameScoreAndItsRules();
+                        mainScriptObj.CheckTheGameScoreAndItsRules(score_text);
 
                         DebugInput(inputField2.text);
                         inputField2.text = "";
@@ -604,7 +613,7 @@ namespace Prototype1v1
                             //update the diagnostic system about the score changes
                             mainScriptObj.playerMetricsObject.CheckAndStoreInputScore(mainScriptObj.the_score);
                             //and check the rules for the score
-                            mainScriptObj.CheckTheGameScoreAndItsRules();
+                            mainScriptObj.CheckTheGameScoreAndItsRules(score_text);
 
                             DebugInput("Red 'unz Go Fasta!!!!" + inputField2.text);
                             //mainScriptObj.CheckForErrors();
@@ -795,9 +804,10 @@ namespace Prototype1v1
 
 				timer.text +="\ntime-on-activity(to be removed) "+
 					temp_activity_container.time_on_activity.Elapsed.ToString();
-				
+
 				mainScriptObj.rulesObject.CheckRulesForActivityMetrics(ref temp_activity_container,
-				   ref would_be_hint);
+                   ref temp_time_indicator);
+                time_indicator_text.text = temp_time_indicator;
 			
 			}
 

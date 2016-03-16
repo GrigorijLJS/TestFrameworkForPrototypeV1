@@ -184,12 +184,12 @@ namespace Prototype1v1
 				CheckTheGameScoreAndItsRules();
 			}*/
 		}
-		public void CheckTheGameScoreAndItsRules()
+		public void CheckTheGameScoreAndItsRules(UnityEngine.UI.Text score_text)
 		{
 			string score_indicator = "";
 			rulesObject.CheckThresholdsForGameScore(ref score_indicator);
 			//rulesObject.SuddenIncreaseOrDecreaseInGameScore();
-			Debug.Log("Score indicator: "+score_indicator+" ;score "+playerMetricsObject.game_score);
+			score_text.text = "Score indicator: "+score_indicator+" ;score "+playerMetricsObject.game_score;
 		}
 		
 		
