@@ -35,6 +35,9 @@ namespace Prototype1v1
 
 		public GameObject QuestionManager;
 
+
+        public GameObject AllPurposeGameObj;
+
 		public string would_be_hint = "";
 		public string the_question= "";
 
@@ -82,6 +85,7 @@ namespace Prototype1v1
         
         void Start()
         {
+            AllPurposeGameObj.transform.position += move_pos_offscreen;
             SetTheLearningText();
 //            //so the objects of metrics are the same
 //			mainScriptObj.rulesObject.playerMetricsObject = mainScriptObj.playerMetricsObject;
@@ -192,6 +196,7 @@ namespace Prototype1v1
                 Dropdown_Menu.transform.position += move_pos_onscreen;
                 timeIndicatorTextObj.transform.position += move_pos_onscreen;
                 scoreTextObj.transform.position += move_pos_onscreen;
+                AllPurposeGameObj.transform.position += move_pos_onscreen;
 
                 score_text.text = "";
 
@@ -206,6 +211,7 @@ namespace Prototype1v1
 
                 var learning_text = GameObject.Find("LearningText");
                 learning_text.transform.position += move_pos_offscreen;
+
 
 
                 //get a new question
