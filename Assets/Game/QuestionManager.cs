@@ -60,9 +60,10 @@ public class QuestionManager : MonoBehaviour {
 
             // add code here to set text values of your Question GameObject
             // e.g. GetComponent<SomeScript>().Text = currentQuestion.questionText;
-            the_question = correct_answer_from_previous_question+"\nQuestion: " + 
-                currentQuestion.questionText + "\n\nYou are on question " + (question_index+1)+" out of "
-                + questionDataForFirstActivity.questions.Count + " and your score is " + the_score+".\n\n";
+            the_question = correct_answer_from_previous_question + "Question " + (question_index + 1) + " out of "
+                + questionDataForFirstActivity.questions.Count + "; current core:" + the_score +
+                "\n\n" + currentQuestion.questionText + "\n\n";
+                ;
             /* +" \n\nChoices: " + currentQuestion.answer1 +
                 "     "+currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5 
@@ -131,8 +132,8 @@ public class QuestionManager : MonoBehaviour {
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5
                 + "     " + currentQuestion.answer6 + "     " + currentQuestion.answer7 + "     " + currentQuestion.answer8
                 + "     " + currentQuestion.answer9 + "     " + currentQuestion.answer10 + "        :-> "
-                + currentQuestion.correctAnswer + "\n\nYou are on question " + (question_index_for_second + 1) + " out of "
-                +questionDataForSecondActivity.questions.Count+ " and your score is " + the_score + ".\n\n";
+                + currentQuestion.correctAnswer + "\n\nQuestion " + (question_index_for_second + 1) + " out of "
+                +questionDataForSecondActivity.questions.Count+ "; current score:" + the_score + "\n\n";
 
         }
 
@@ -173,7 +174,7 @@ public class QuestionManager : MonoBehaviour {
             new_points = currentQuestion.questionScore;
 
             correct_answer_from_previous_question = "Correct answer! You gained "+currentQuestion.questionScore
-                +" points! Here is another question:\n";
+                +" points!\n";
 			return 0;
 		}
 		else
@@ -263,7 +264,7 @@ public class QuestionManager : MonoBehaviour {
             new_points = currentQuestion.questionScore;
 
             correct_answer_from_previous_question = "Correct answer! You gained " + currentQuestion.questionScore
-                + " points! Here is another question:\n";
+                + " points!\n";
             return 0;
         }
         else

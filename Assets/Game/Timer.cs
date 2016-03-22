@@ -711,7 +711,7 @@ namespace Prototype1v1
 
                             //give the final output to the player
                             the_question = " ---   GAME OVER! THANK YOU FOR PLAYING!   --- " +
-                                "\n\n\nYour score is: " + mainScriptObj.the_score+". ";
+                                "\n\n\nYour final score is: " + mainScriptObj.the_score+". ";
                             if (mainScriptObj.the_score>=150)
                             {
                                 the_question += "PERFECT!!!";
@@ -948,10 +948,10 @@ namespace Prototype1v1
 
             learningText.text = "\n\n\nHello! With this little game we want to help you learn more about the geography" +
             " of the \"old continent\" - Europe and its countries. You might ask yourself - how is this useful?" +
-            " Well, imagine you are going on a trip through Europe and you want to visit some/most, or even just one, of the countries " +
-            " on the continent. Now, in order to prepare you for the journey we made a collection" +
+            " Well, imagine you are going on a trip through Europe and you want to visit some/most, or even just one," +
+            " of the countries on the continent. Now, in order to prepare you for the journey we made a collection" +
             " of interesting and important information that you might need when interacting with the locals. Then you can" +
-            " show off your knowledge and rise above the average tourist." + 
+            " show off your knowledge and rise above the average tourist. " + 
             "First of all, let us start with some numbers. There are aproximatelly 50 countries in Europe and exactly 28" +
             " of them are part of the European Union. " +
             "The following is a list of some countries in Europe along with their capitals." +
@@ -1012,7 +1012,7 @@ namespace Prototype1v1
 
             + "\n\nAn interesting fact to note about the continent itself is that some consider it "
             + "to be one of the largest peninsulas on Earth."
-            + " Speaking of peninsulas, did you know that the four largest ones in Europe(ordered from "
+            + " Speaking of peninsulas, did you know that the four largest ones in Europe (ordered from "
             + "largest to smallest) are the Scandinavian, Balkan, Iberian, and Italian? The largest peninsula "
             + "is shared by the following countries: Norway, Sweden, and Finland. The Balkan peninsula is comprised"
             + " of: Albania, Bulgaria, Bosnia and Herzegovina, Croatia, Greece, Italy, Kosovo, Macedonia, "
