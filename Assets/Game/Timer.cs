@@ -98,9 +98,29 @@ namespace Prototype1v1
         Vector3 move_pos_onscreen = new Vector3(-1500.0f, 0, 0);
 
 
+        void Awake()
+        {
+            /*string path = @"D:\Visual Studio 2013 Projects\Prototype1v2\Prototype1v1\bin\Debug\Prototype1v1.exe";
+            System.Diagnostics.Process foo = new System.Diagnostics.Process();
+            //foo.StartInfo.FileName = "Prototype1v1.exe";
+            foo.StartInfo.Arguments = path;
+            foo.Start();
+            foo.WaitForExit();*/
+
+            //System.Diagnostics.Process.Start
+            //    (@"D:\Visual Studio 2013 Projects\Prototype1v2\Prototype1v1\bin\Debug\Prototype1v1.exe");
+
+
+            //System.Diagnostics.Process.Start
+            //    (@"C:\Users\GSV\Desktop\pub_test\Prototype1v1.exe");
+        }
+
         
         void Start()
         {
+
+
+
             AllPurposeGameObj.transform.position += move_pos_offscreen;
             SetTheLearningText();
 //            //so the objects of metrics are the same
@@ -258,9 +278,10 @@ namespace Prototype1v1
 
                             //if the following int is 0, the answer is correct, if it is 1 error in recognizing happened
                             //if it is 2 error in recall was made, and 3 is for error in implementing 
-                            int corectAnswerOrTypeOfError = QManagObj.CheckCorrectnessOfAnswer(
-                                Dropdown_Menu.options[Dropdown_Menu.value].text, ref new_points);
-
+                            bool answer_flag = mainScriptObj.rulesObject.CheckCorrectnessOfAnswer(
+                                Dropdown_Menu.options[Dropdown_Menu.value].text, QManagObj.currentQuestion.correctAnswer,
+                                QManagObj.currentQuestion.questionScore);
+                            
                             /*int TempInt = Dropdown_Menu.value;
                             Dropdown_Menu.value = Dropdown_Menu.value + 1;
                             Dropdown_Menu.value = TempInt;*/
@@ -269,7 +290,7 @@ namespace Prototype1v1
                             //Dropdown_Menu.value = 0;
                             //Dropdown_Menu.value = 0;
 
-                            if (corectAnswerOrTypeOfError == 0)
+                            if (answer_flag)
                             {
                                 //the player gets some points
                                 mainScriptObj.the_score += new_points;
@@ -609,10 +630,11 @@ namespace Prototype1v1
 
                     //if the following int is 0, the answer is correct, if it is 1 error in recognizing happened
                     //if it is 2 error in recall was made
-                    int corectAnswerOrTypeOfError = QManagObj.CheckCorrectnessOfAnswerForSecond
-                        (inputField2.text, ref new_points);
+                    bool answer_flag = mainScriptObj.rulesObject.CheckCorrectnessOfAnswer(
+                        Dropdown_Menu.options[Dropdown_Menu.value].text, QManagObj.currentQuestion.correctAnswer,
+                        QManagObj.currentQuestion.questionScore);
 
-                    if (corectAnswerOrTypeOfError == 0)
+                    if (answer_flag)
                     {
                         //the player gets some points
                         mainScriptObj.the_score += new_points;
@@ -627,7 +649,7 @@ namespace Prototype1v1
                     }
                     else
                     {//incorrect answers
-                        if (corectAnswerOrTypeOfError == 1)
+                        //if (corectAnswerOrTypeOfError == 1)
                         {
                             //the player loses some points
                             mainScriptObj.the_score -= new_points;

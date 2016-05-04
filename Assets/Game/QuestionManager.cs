@@ -14,7 +14,7 @@ public class QuestionManager : MonoBehaviour {
 	///*private*/public TextAsset questionDataXMLFile;
     private QuestionData questionDataForFirstActivity;
     private QuestionData questionDataForSecondActivity;
-	private Question currentQuestion;
+	public Question currentQuestion;
 
     private int question_index;
     private int question_index_for_second;
@@ -63,7 +63,7 @@ public class QuestionManager : MonoBehaviour {
             the_question = correct_answer_from_previous_question + "Question " + (question_index + 1) + " out of "
                 + questionDataForFirstActivity.questions.Count + "; current core:" + the_score +
                 "\n\n" + currentQuestion.questionText + "\n\n";
-                ;
+
             /* +" \n\nChoices: " + currentQuestion.answer1 +
                 "     "+currentQuestion.answer2
                 + "     " + currentQuestion.answer3 + "     " + currentQuestion.answer4 + "     " + currentQuestion.answer5 
@@ -153,6 +153,84 @@ public class QuestionManager : MonoBehaviour {
         else//new activity
             return true;
     }
+    
+    /*public int CheckCorrectnessOfAnswer(string selectedAnswer, ref int new_points)
+    {
+
+        //split the strings into separate words
+        string[] player_answers = selectedAnswer.Split(' ');
+        string[] correct_answers = currentQuestion.correctAnswer.Split(' ');
+
+        if(player_answers.Length>1)
+        {
+            int number_of_correct_items = 0;
+            foreach (string corr_answer in correct_answers)
+            {
+                foreach (string play_answ in player_answers)
+                {
+                    int distance_between_strings = ComputeDistance(corr_answer, play_answ);
+                    if (play_answ.Equals(corr_answer, StringComparison.OrdinalIgnoreCase))
+                    {
+                        number_of_correct_items++;
+                    }
+                }
+            }
+
+            if (number_of_correct_items == correct_answers.Length && player_answers.Length == correct_answers.Length)
+            {//correct answer, i.e. the strings player_answers and correct_answers contain the same items
+
+                //save the question's points and use them later to add points from the game score
+                new_points = currentQuestion.questionScore;
+
+                correct_answer_from_previous_question = "Correct answer! You gained " + currentQuestion.questionScore
+                    + " points!\n";
+                return 0;
+            }
+            else
+            {//incorrect answer and an error in classification 
+
+                //save half of the question's points and use them later to subtract points from the game score
+                new_points = currentQuestion.questionScore;
+
+                correct_answer_from_previous_question = "Wrong answer! The correct answer was: " + currentQuestion.correctAnswer +
+                    ". You lost " + currentQuestion.questionScore + " points! \n";
+                return 1;
+            }
+        }
+        else if(player_answers.Length==1)
+        {
+
+            int distance_between_strings = ComputeDistance(currentQuestion.correctAnswer, selectedAnswer);
+
+            if (selectedAnswer.Equals(currentQuestion.correctAnswer, StringComparison.OrdinalIgnoreCase))
+            {//correct answer, i.e. the strings are equal
+
+                //save the question's points and use them later to add points from the game score
+                new_points = currentQuestion.questionScore;
+
+                correct_answer_from_previous_question = "Correct answer! You gained " + currentQuestion.questionScore
+                    + " points!\n";
+                return 0;
+            }
+            else
+            {
+                //save half of the question's points and use them later to subtract points from the game score
+                new_points = currentQuestion.questionScore;
+
+                correct_answer_from_previous_question = "Wrong answer! The correct answer was: " + currentQuestion.correctAnswer +
+                    ". You lost " + currentQuestion.questionScore + " points! \n";
+                return 2;
+            }
+        }
+        else
+        {
+            //error
+            return 3;
+        }
+        
+
+        
+    }*/
 	
 	/*//Use this to see if user selected correct answer
 	public bool CorrectAnswerSelected(int selectedAnswerID) {
@@ -160,124 +238,124 @@ public class QuestionManager : MonoBehaviour {
 	}*/
 
 
-	public int CheckCorrectnessOfAnswer(string selectedAnswer, ref int new_points) 
-	{
+    //public int CheckCorrectnessOfAnswer(string selectedAnswer, ref int new_points)
+    //{
 
-        /*//a shortcut in case the selectedAnser is empty - which is an error in implementing
-        if (selectedAnswer == "" || selectedAnswer == null)
-            return 3;*/
+    //    /*//a shortcut in case the selectedAnser is empty - which is an error in implementing
+    //    if (selectedAnswer == "" || selectedAnswer == null)
+    //        return 3;*/
 
-		if(selectedAnswer.Equals(currentQuestion.correctAnswer, StringComparison.OrdinalIgnoreCase))
-        {//correct answer, i.e. the strings are equal
+    //    if (selectedAnswer.Equals(currentQuestion.correctAnswer, StringComparison.OrdinalIgnoreCase))
+    //    {//correct answer, i.e. the strings are equal
 
-            //save the question's points and use them later to add points from the game score
-            new_points = currentQuestion.questionScore;
+    //        //save the question's points and use them later to add points from the game score
+    //        new_points = currentQuestion.questionScore;
 
-            correct_answer_from_previous_question = "Correct answer! You gained "+currentQuestion.questionScore
-                +" points!\n";
-			return 0;
-		}
-		else
-        {
-            //save half of the question's points and use them later to subtract points from the game score
-            new_points = currentQuestion.questionScore;
+    //        correct_answer_from_previous_question = "Correct answer! You gained " + currentQuestion.questionScore
+    //            + " points!\n";
+    //        return 0;
+    //    }
+    //    else
+    //    {
+    //        //save half of the question's points and use them later to subtract points from the game score
+    //        new_points = currentQuestion.questionScore;
 
-            correct_answer_from_previous_question = "Wrong answer! The correct answer was: "+currentQuestion.correctAnswer+
-                ". You lost "+currentQuestion.questionScore +" points! \n";
-            return 2;
+    //        correct_answer_from_previous_question = "Wrong answer! The correct answer was: " + currentQuestion.correctAnswer +
+    //            ". You lost " + currentQuestion.questionScore + " points! \n";
+    //        return 2;
 
-			/*//error in recognizing happens if the two strings partly match???
-            if (currentQuestion.correctAnswer.Contains(selectedAnswer))
-                return true;
-            else if (selectedAnswer.Contains(currentQuestion.correctAnswer))
-                return true;
-			//error in recall if the two strings are totally different??? 
-			return false;*/
+    //        /*//error in recognizing happens if the two strings partly match???
+    //        if (currentQuestion.correctAnswer.Contains(selectedAnswer))
+    //            return true;
+    //        else if (selectedAnswer.Contains(currentQuestion.correctAnswer))
+    //            return true;
+    //        //error in recall if the two strings are totally different??? 
+    //        return false;*/
 
-            /*//calculate the difference in the strings, i.e. the "distance" between them
-            int differenceInStrings = ComputeDistance(currentQuestion.correctAnswer, selectedAnswer);
+    //        /*//calculate the difference in the strings, i.e. the "distance" between them
+    //        int differenceInStrings = ComputeDistance(currentQuestion.correctAnswer, selectedAnswer);
 
-            int n = 0;//used to check if the answer is a number
+    //        int n = 0;//used to check if the answer is a number
 
-            if (int.TryParse(selectedAnswer, out n) && int.TryParse(currentQuestion.correctAnswer, out n))
-            {//if the answers (both correct one the one written by the player) are numbers
-                if (differenceInStrings > 0 && differenceInStrings < 3)
-                {
-                    return 1;//error in recognizing happens if the two strings partly match 
-                    //this case is to avoid cases like: correct answer is "23" and the writen answer is "Ys"
-                    //the difference is 2 but the given answer is not a number at all - hence not close to the
-                    //actual answer
+    //        if (int.TryParse(selectedAnswer, out n) && int.TryParse(currentQuestion.correctAnswer, out n))
+    //        {//if the answers (both correct one the one written by the player) are numbers
+    //            if (differenceInStrings > 0 && differenceInStrings < 3)
+    //            {
+    //                return 1;//error in recognizing happens if the two strings partly match 
+    //                //this case is to avoid cases like: correct answer is "23" and the writen answer is "Ys"
+    //                //the difference is 2 but the given answer is not a number at all - hence not close to the
+    //                //actual answer
 
-                }
-                else
-                {
-                    //otherwise it is an error in recall
-                    return 2;
-                }
-            }
-            else
-            {//if the answer is not a number, i.e. its textual
-                if (differenceInStrings > 0 && differenceInStrings <= 3 && selectedAnswer.Length > 3)
-                {
-                    return 1;//error in recognizing happens if the two strings partly match and the 
-                    //lenght of the answer is bigger than 3
+    //            }
+    //            else
+    //            {
+    //                //otherwise it is an error in recall
+    //                return 2;
+    //            }
+    //        }
+    //        else
+    //        {//if the answer is not a number, i.e. its textual
+    //            if (differenceInStrings > 0 && differenceInStrings <= 3 && selectedAnswer.Length > 3)
+    //            {
+    //                return 1;//error in recognizing happens if the two strings partly match and the 
+    //                //lenght of the answer is bigger than 3
 
-                }
-                else
-                {
-                    //otherwise it is an error in recall
-                    return 2;
-                }
-            }*/
-            
-		}
-	}
+    //            }
+    //            else
+    //            {
+    //                //otherwise it is an error in recall
+    //                return 2;
+    //            }
+    //        }*/
+
+    //    }
+    //}
 
 
-    public int CheckCorrectnessOfAnswerForSecond(string selectedAnswer, ref int new_points)
-    {
+    //public int CheckCorrectnessOfAnswerForSecond(string selectedAnswer, ref int new_points)
+    //{
 
-        /*//a shortcut in case the selectedAnser is empty - which is an error in implementing
-        if (selectedAnswer == "" || selectedAnswer == null)
-            return 2;*/
+    //    /*//a shortcut in case the selectedAnser is empty - which is an error in implementing
+    //    if (selectedAnswer == "" || selectedAnswer == null)
+    //        return 2;*/
 
-        //split the strings into separate words
-        string[] player_answers = selectedAnswer.Split(' ');
-        string[] correct_answers = currentQuestion.correctAnswer.Split(' ');
+    //    //split the strings into separate words
+    //    string[] player_answers = selectedAnswer.Split(' ');
+    //    string[] correct_answers = currentQuestion.correctAnswer.Split(' ');
 
-        int number_of_correct_items=0;
-        foreach(string corr_answer in correct_answers)
-        {
-            foreach(string play_answ in player_answers)
-            {
-                if (play_answ.Equals(corr_answer, StringComparison.OrdinalIgnoreCase))
-                {
-                    number_of_correct_items++;
-                }
-            }
-        }
+    //    int number_of_correct_items=0;
+    //    foreach(string corr_answer in correct_answers)
+    //    {
+    //        foreach(string play_answ in player_answers)
+    //        {
+    //            if (play_answ.Equals(corr_answer, StringComparison.OrdinalIgnoreCase))
+    //            {
+    //                number_of_correct_items++;
+    //            }
+    //        }
+    //    }
 
-        if (number_of_correct_items==correct_answers.Length && player_answers.Length==correct_answers.Length)
-        {//correct answer, i.e. the strings player_answers and correct_answers contain the same items
+    //    if (number_of_correct_items==correct_answers.Length && player_answers.Length==correct_answers.Length)
+    //    {//correct answer, i.e. the strings player_answers and correct_answers contain the same items
 
-            //save the question's points and use them later to add points from the game score
-            new_points = currentQuestion.questionScore;
+    //        //save the question's points and use them later to add points from the game score
+    //        new_points = currentQuestion.questionScore;
 
-            correct_answer_from_previous_question = "Correct answer! You gained " + currentQuestion.questionScore
-                + " points!\n";
-            return 0;
-        }
-        else
-        {//incorrect answer and an error in classification 
+    //        correct_answer_from_previous_question = "Correct answer! You gained " + currentQuestion.questionScore
+    //            + " points!\n";
+    //        return 0;
+    //    }
+    //    else
+    //    {//incorrect answer and an error in classification 
 
-            //save half of the question's points and use them later to subtract points from the game score
-            new_points = currentQuestion.questionScore;
+    //        //save half of the question's points and use them later to subtract points from the game score
+    //        new_points = currentQuestion.questionScore;
 
-            correct_answer_from_previous_question = "Wrong answer! The correct answer was: " + currentQuestion.correctAnswer +
-                ". You lost " + currentQuestion.questionScore + " points! \n";
-            return 1;
-        }
-    }
+    //        correct_answer_from_previous_question = "Wrong answer! The correct answer was: " + currentQuestion.correctAnswer +
+    //            ". You lost " + currentQuestion.questionScore + " points! \n";
+    //        return 1;
+    //    }
+    //}
 
     //!!!!!!!CURRENTLY NOT USED ANYMORE
     //based on the solution from: http://stackoverflow.com/questions/6944056/c-sharp-compare-string-similarity
