@@ -61,7 +61,8 @@ public class QuestionData
 		} 
 	}
 
-	public static QuestionData LoadFromText(string text) {
+	public static QuestionData LoadFromText(string text) 
+    {
 		try {
 			XmlSerializer serializer = new XmlSerializer(typeof(QuestionData));            
 			return serializer.Deserialize(new StringReader(text)) as QuestionData;

@@ -132,8 +132,24 @@ namespace Prototype1v1
                 {
                     foreach (string play_answ in player_answers)
                     {
-                        //int distance_between_strings = ComputeDistance(corr_answer, play_answ);
-                        //HOW TO USE THE ABOVE????
+                        int distance_between_strings = ComputeDistance(corr_answer, play_answ);
+                        float string_similarity=0;
+
+                        //similarity is based on the formulas from 
+                        //http://hpi.de/fileadmin/user_upload/fachgebiete/naumann/folien/SS13/DPDC/DPDC_12_Similarity.pdf
+                        if(corr_answer.Length>play_answ.Length)
+                        {
+                            string_similarity = 1 - ((float)distance_between_strings / (float)corr_answer.Length);
+                        }
+                        else if(corr_answer.Length<play_answ.Length)
+                        {
+                            string_similarity = 1 - ((float)distance_between_strings / (float)play_answ.Length);
+                        }
+                        else
+                        {
+                            string_similarity = 1 - ((float)distance_between_strings / (float)play_answ.Length);
+                        }
+
                         if (play_answ.Equals(corr_answer, StringComparison.OrdinalIgnoreCase))
                         {
                             number_of_correct_items++;
@@ -165,6 +181,22 @@ namespace Prototype1v1
             {
 
                 int distance_between_strings = ComputeDistance(correctAnswer, playersAnswer);
+                float string_similarity = 0;
+
+                //similarity is based on the formulas from 
+                //http://hpi.de/fileadmin/user_upload/fachgebiete/naumann/folien/SS13/DPDC/DPDC_12_Similarity.pdf      
+                if (correctAnswer.Length > playersAnswer.Length)
+                {
+                    string_similarity = 1 - ((float)distance_between_strings / (float)correctAnswer.Length);
+                }
+                else if (correctAnswer.Length < playersAnswer.Length)
+                {
+                    string_similarity = 1 - ((float)distance_between_strings / (float)playersAnswer.Length);
+                }
+                else
+                {
+                    string_similarity = 1 - ((float)distance_between_strings / (float)playersAnswer.Length);
+                }
 
                 if (playersAnswer.Equals(correctAnswer, StringComparison.OrdinalIgnoreCase))
                 {//correct answer, i.e. the strings are equal

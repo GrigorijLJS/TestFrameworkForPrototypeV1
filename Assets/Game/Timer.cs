@@ -110,7 +110,7 @@ namespace Prototype1v1
             //System.Diagnostics.Process.Start
             //    (@"D:\Visual Studio 2013 Projects\Prototype1v2\Prototype1v1\bin\Debug\Prototype1v1.exe");
 
-
+            
             //System.Diagnostics.Process.Start
             //    (@"C:\Users\GSV\Desktop\pub_test\Prototype1v1.exe");
         }
@@ -275,12 +275,12 @@ namespace Prototype1v1
                         if (Dropdown_Menu.options[Dropdown_Menu.value].text.ToString() != "Make your choice!")
                         {
                             new_points = 0;
-
+                            string temp_str = "";
                             //if the following int is 0, the answer is correct, if it is 1 error in recognizing happened
                             //if it is 2 error in recall was made, and 3 is for error in implementing 
                             bool answer_flag = mainScriptObj.rulesObject.CheckCorrectnessOfAnswer(
                                 Dropdown_Menu.options[Dropdown_Menu.value].text, QManagObj.currentQuestion.correctAnswer,
-                                QManagObj.currentQuestion.questionScore);
+                                QManagObj.currentQuestion.questionScore, ref temp_str);
                             
                             /*int TempInt = Dropdown_Menu.value;
                             Dropdown_Menu.value = Dropdown_Menu.value + 1;
@@ -627,12 +627,13 @@ namespace Prototype1v1
                 inputField2.onEndEdit.AddListener(delegate
                 {
                     new_points = 0;
+                    string temp_str = "";
 
                     //if the following int is 0, the answer is correct, if it is 1 error in recognizing happened
                     //if it is 2 error in recall was made
                     bool answer_flag = mainScriptObj.rulesObject.CheckCorrectnessOfAnswer(
                         Dropdown_Menu.options[Dropdown_Menu.value].text, QManagObj.currentQuestion.correctAnswer,
-                        QManagObj.currentQuestion.questionScore);
+                        QManagObj.currentQuestion.questionScore, ref temp_str);
 
                     if (answer_flag)
                     {
